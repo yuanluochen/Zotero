@@ -1,18 +1,18 @@
 {
 	"translatorID": "5e3ad958-ac79-463d-812b-a86a9235c28f",
+	"translatorType": 1,
 	"label": "RDF",
 	"creator": "Simon Kornblith",
 	"target": "rdf",
 	"minVersion": "2.1.9",
-	"maxVersion": "",
+	"maxVersion": null,
 	"priority": 100,
+	"inRepository": true,
 	"configOptions": {
 		"async": true,
 		"dataMode": "rdf/xml"
 	},
-	"inRepository": true,
-	"translatorType": 1,
-	"lastUpdated": "2023-04-24 15:51:01"
+	"lastUpdated": "2025-08-07 14:50:00"
 }
 
 /*
@@ -1012,10 +1012,13 @@ function importItem(newItem, node) {
 		n.so + "issueNumber"], true);
 
 
-	// number means the same thing as issue
-	// and will automatically then also map
-	// to patentNumber or reportNumber
-	newItem.number = newItem.issue;
+	// Move issue to number if issue isn't valid for this type,
+	// because number will automatically then also map to
+	// patentNumber or reportNumber
+	if (!ZU.fieldIsValidForType("issue", newItem.itemType)) {
+		newItem.number = newItem.issue;
+		delete newItem.issue;
+	}
 
 	// edition
 	newItem.edition = getFirstResults(node, [n.prism + "edition", n.prism2_0 + "edition", n.prism2_1 + "edition", n.bibo + "edition", n.so + "bookEdition", n.so + "version"], true);

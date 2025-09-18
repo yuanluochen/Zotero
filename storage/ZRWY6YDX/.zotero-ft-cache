@@ -1,0 +1,362 @@
+Latex数学公式符号大全(超详细)
+yushan.ji 阅读量5.6w 收藏 381 点赞数 92
+文章标签: 笔记
+已于 2024-03-01 21:16:44 修改 版权
+GitCode 开源社区 文章已被社区收录 加入社区
+基本符号
+小写希腊字母
+注:部分希腊字母在数学公式中常以变量形式出现,例如 在数学中一般写法为 , 在数学中通常写作
+符号 语法 符号 语法 符号 语法
+\alpha \beta \gamma
+\theta \varepsilon \delta
+\mu \nu \eta
+\zeta \lambda \psi
+\sigma \xi \tau
+\phi \varphi \rho
+\chi \omega \pi
+大写希腊字母
+大写希腊字母通常是小写希腊字母的LATEX 语法第一个字母改为大写,见下表
+符号 语法 符号 语法 符号 语法
+\Sigma \Pi \Delta
+\Gamma \Psi \Theta
+\Lambda \Omega \Phi
+\Xi
+常用字体
+默认的字体为 ,也就是\mathnormal{ABCdef}(当然,打公式的时候不需要加上这个\mathnormal,直接打字母就是这个效果)
+字体 语法 字体 语法
+\mathrm{ABCdef} \mathbf{ABCdef}
+\mathit{ABCdef} \pmb{ABCdef}
+\mathscr{ABCdef} \mathcal{ABCdef}
+\mathfrak{ABCdef} \mathbb{ABCdef}
+常见运算符
+运算符 语法 运算符 语法 运算符 语法
++ - \times
+\pm \cdot \ast
+\cup \cap \circ
+\lor或\vee \land或\wedge \lnot
+\oplus \ominus \otimes
+\odot \oslash \bullet
+\sqrt{x} \sqrt[n]{x}
+大尺寸运算符
+ε εφ φ
+αβ γ
+θε δ
+μν η
+ζλ ψ
+σξ τ
+φφ ρ
+χω π
+Σ ΠΔ
+Γ ΨΘ
+Λ ΩΦ
+Ξ
+ABC def
+ABCdef ABCdef
+ABCdef ABCdef
+ABC def ABCdef
+ABCdef ABCdef
++− ×
+±⋅ ∗
+∪∩ ∘
+∨∧ ¬
+⊕⊖ ⊗
+⊙⊘ ∙
+x
+nx
+博客 下载 学习 社区 C知道 GitCode InsCode 会议 会员中心 消息 历史 创作
+
+
+运算符 语法 运算符 语法 运算符 语法
+\sum \prod \int
+\bigcup \bigcap \oint
+\bigvee \bigwedge \iint
+\coprod \bigsqcup \oiint
+常见关系符号
+符号 语法 符号 语法 符号 语法
+< >=
+\leq \geq \neq
+\ll \gg \equiv
+\subset \supset \approx
+\subseteq \supseteq \sim
+\in \ni \propto
+\vdash \dashv \models
+\mid \parallel \perp
+\notin \Join \nsim
+\subsetneq \supsetneq
+数学模式重音符
+符号 语法 符号 语法 符号 语法
+\hat{a} \bar{a} \tilde{a}
+\vec{a} \dot{a} \ddot{a}
+\widehat{abc} \widetilde{abc} \overline{abc}
+箭头
+如果需要长箭头,只需要在语法前面加上\long,例如\longleftarrow即为 ,如果加上\Long则变为双线长箭头,例如\Longleftarrow即为
+符号 语法 符号 语法 符号 语法
+\leftarrow \rightarrow \leftrightarrow
+\Leftarrow \Rightarrow \Leftrightarrow
+\uparrow \downarrow \updownarrow
+\Uparrow \Downarrow \Updownarrow
+\leftharpoonup \leftharpoondown \rightharpoonup
+\rightharpoondown \rightleftharpoons \leftrightharpoons
+\iff \mapsto
+括号
+括号 语法 括号 语法 括号 语法
+() [] \{\}
+\lfloor\rfloor \lceil\rceil \langle\rangle
+大尺寸括号
+括号 语法 括号 语法
+\left( \right) \left[ \right]
+\overbrace{x_1x_2\ldots x_n}^{n} \underbrace{x_1x_2\ldots x_n}_{n}
+注:大尺寸的()和[]是可以根据公式的高度自动调节的,例如
+∑∏ ∫
+⋃⋂ ∮
+⋁⋀ ∫∫
+∐⨆ ∫∫
+<>=
+≤ ≥ =
+≪≫ ≡
+⊂⊃≈
+⊆⊇∼
+∈∋∝
+⊢ ⊣⊨
+∣ ∥⊥
+∈/ ⋈ ≁
+⊊⊋
+a^ aˉ a~
+a a ̇ a ̈
+abc abc abc
+⟵⟸
+← →↔
+⇐ ⇒⇔
+↑ ↓↕
+⇑ ⇓⇕
+↼ ↽⇀
+⇁ ⇌⇋
+⟺↦
+() [] {}
+⌊⌋ ⌈⌉ ⟨⟩
+() []
+x x ...x
+12 n
+n
+n
+x x ...x
+12 n
+博客 下载 学习 社区 C知道 GitCode InsCode 会议 会员中心 消息 历史 创作
+
+
+可以看出,括号高度可以框住整个公式
+因此在这种大型的公式中,使用大尺寸括号视觉效果更美观
+其他常见符号
+符号 语法 符号 语法 符号 语法
+\forall \exist \angle
+\emptyset \partial \infty
+\ldots \cdots \dots
+\vdots \ddots \prime
+\because \therefore \Box
+\triangle \S
+数学公式写法
+上下标
+^ :上标
+_ :下标
+例如:
+\sum_{i=1}^{n}X_n 表示
+\int_{0}^{\infty}x^2dx 表示
+\prod_{i=1}^{n}X_n 表示
+分数
+使用 \frac{}{} 即可,例如 \frac{a}{b} 表示
+插入文字
+使用 \text ,例如 \text{hello,world!} 表示
+常见 函数
+函数 语法 函数 语法 函数 语法
+\log() \ln() \lg()
+\max \min \lim_{x \to \infty}
+\arg\max_{c \in C} \arg\min_{c \in C} \exp
+矩阵、行列式
+& 表示分隔元素, \\ 表示换行
+\arg\min_{\theta} \left[ -\sum_{i=1}^{n} \left[ \mathbf{y}^{(i)}\ln(h_{\theta}(\mathbf{x}^{(i)})) + (1-\mathbf{y}^{(i)})\ln(1-h_{\theta}(\mathbf{x}^{(i)})) \right] \right]
+1 2 3 4 5 6 7 8
+arg − y ln(h (x )) + (1 − y ) ln(1 − h (x ))
+mθin [
+i=1
+∑
+n
+[ (i) θ (i) (i) θ (i) ]]
+∀ ∃∠
+∅ ∂∞
+... ⋯...
+⋮ ⋱′
+∵ ∴□
+△§
+∑i=1 X
+nn
+x dx
+∫0
+∞2
+∏i=1 X
+nn
+b
+a
+hello,world!
+log() ln() lg()
+max min limx→∞
+arg maxc∈C arg minc∈C exp
+A= \begin{pmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{pmatrix}
+1 2 3 4 5
+博客 下载 学习 社区 C知道 GitCode InsCode 会议 会员中心 消息 历史 创作
+
+
+多行公式对齐
+使用 \begin{split} \end{split} ,在需要对齐的地方添加 & 符号,注意需要用 \\ 来换行。
+例如:
+A = (a11
+a21
+a12
+a22 )
+A= \begin{bmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{bmatrix}
+1 2 3 4 5
+A = [a11
+a21
+a12
+a22 ]
+A= \begin{Bmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{Bmatrix}
+1 2 3 4 5
+A = {a11
+a21
+a12
+a22 }
+A= \begin{vmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{vmatrix}
+1 2 3 4 5
+A = a11
+a21
+a12 a22
+A= \begin{Vmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{Vmatrix}
+1 2 3 4 5
+A = a11
+a21
+a12 a22
+A= \begin{matrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{matrix}
+1 2 3 4 5
+A = a11
+a21
+a12 a22
+\begin{split} L(\theta) &= \arg\max_{\theta}\ln(P_{All})\\ &= \arg\max_{\theta}\ln\prod_{i=1}^{n} \left[ (h_{\theta}(\mathbf{x}^{(i)}))^{\mathbf{y}^{(i)}}\cdot (1-h_{\theta}(\mathbf{x}^{(i)}))^{1-\mathbf{y}^{(i)}} \right]\\ &= \arg\max_{\theta}\sum_{i=1}^{n} \left[
+1 2 3 4 5 6 7 8 9 10 11
+博客 下载 学习 社区 C知道 GitCode InsCode 会议 会员中心 消息 历史 创作
+
+
+上例中,在 = 前添加了 & ,因此实现等号对齐;
+\begin{split} \end{split} 语法默认为右对齐,也就是说如果不在任何地方添加 & 符号,则公式默认右侧对齐,例如:
+上述LATEX代码没有添加 & 符号,则公式 右对齐 :
+如果希望左对齐,例如
+除了 \begin{split} \end{split} ,也可以用 \begin{align} \end{align} ,用法与 split 相同,对齐方式也相同;
+只有一点不同:采用align环境会默认为每一条公式编号(如下例),split 则不会编号。
+\mathbf{y}^{(i)}\ln(h_{\theta}(\mathbf{x}^{(i)})) + (1-\mathbf{y}^{(i)})\ln(1-h_{\theta}(\mathbf{x}^{(i)})) \right]\\ &= \arg\min_{\theta} \left[
+11 12 13 14 15
+L(θ) = arg ln(P )
+mθax All
+= arg ln (h (x )) ⋅ (1 − h (x ))
+mθax
+i=1
+∏
+n
+[ θ (i) y(i)
+θ (i) 1−y(i)
+]
+= arg y ln(h (x )) + (1 − y ) ln(1 − h (x ))
+mθax
+i=1
+∑
+n
+[ (i) θ (i) (i) θ (i) ]
+= arg − y ln(h (x )) + (1 − y ) ln(1 − h (x ))
+mθin [
+i=1
+∑
+n
+[ (i) θ (i) (i) θ (i) ]]
+= arg l(θ)
+mθin
+\begin{split} L(\theta) = \arg\max_{\theta}\ln(P_{All})\\ = \arg\max_{\theta}\ln\prod_{i=1}^{n} \left[ (h_{\theta}(\mathbf{x}^{(i)}))^{\mathbf{y}^{(i)}}\cdot (1-h_{\theta}(\mathbf{x}^{(i)}))^{1-\mathbf{y}^{(i)}} \right]\\ = \arg\max_{\theta}\sum_{i=1}^{n} \left[ \mathbf{y}^{(i)}\ln(h_{\theta}(\mathbf{x}^{(i)})) + (1-\mathbf{y}^{(i)})\ln(1-h_{\theta}(\mathbf{x}^{(i)})) \right]\\ = \arg\min_{\theta} \left[
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+L(θ) = arg ln(P )
+mθax All
+= arg ln (h (x )) ⋅ (1 − h (x ))
+mθax
+i=1
+∏
+n
+[ θ (i) y(i)
+θ (i) 1−y(i)
+]
+= arg y ln(h (x )) + (1 − y ) ln(1 − h (x ))
+mθax
+i=1
+∑
+n
+[ (i) θ (i) (i) θ (i) ]
+= arg − y ln(h (x )) + (1 − y ) ln(1 − h (x ))
+mθin [
+i=1
+∑
+n
+[ (i) θ (i) (i) θ (i) ]]
+= arg l(θ)
+mθin
+\begin{split} &\ln h_{\theta}(\mathbf{x}^{(i)}) = \ln\frac{1}{1+e^{-\theta^T \mathbf{x}^{(i)}}} = -\ln(1+e^{\theta^T \mathbf{x}^{(i)}})\\ &\ln(1-h_{\theta}(\mathbf{x}^{(i)})) = \ln(1-\frac{1}{1+e^{-\theta^T \mathbf{x}^{(i)}}}) = -\theta^T \mathbf{x}^{(i)}-\ln(1+e^{\theta^T \mathbf{x}^{(i)}}) \end{split}
+1 2 3 4 5 6 7 8
+ln h (x ) = ln = − ln(1 + e )
+θ (i)
+1 + e−θT x(i)
+1 θT x(i)
+ln(1 − h (x )) = ln(1 − ) = −θ x − ln(1 + e )
+θ (i)
+1 + e−θT x(i)
+1 T (i) θT x(i)
+博客 下载 学习 社区 C知道 GitCode InsCode 会议 会员中心 消息 历史 创作
+
+
+LaTeX数学公式大全 qi_programmer的博客 1万+
+但可以在align后加一个 * 号,则align环境也可以取消公式自动编号,如下: (也就是说 align* 和 split 的用法完全相同)
+方程组
+使用 \begin{cases} \end{cases}
+例如:
+注意 LATEX语法 可以嵌套使用,上例即为 \begin{cases} \end{cases} 下嵌套了 begin{split} \end{split} 。
+也可以将公式和文字结合起来,例如:
+注: \quad 表示空格。
+\begin{align} &\ln h_{\theta}(\mathbf{x}^{(i)}) = \ln\frac{1}{1+e^{-\theta^T \mathbf{x}^{(i)}}} = -\ln(1+e^{\theta^T \mathbf{x}^{(i)}})\\ &\ln(1-h_{\theta}(\mathbf{x}^{(i)})) = \ln(1-\frac{1}{1+e^{-\theta^T \mathbf{x}^{(i)}}}) = -\theta^T \mathbf{x}^{(i)}-\ln(1+e^{\theta^T \mathbf{x}^{(i)}}) \end{align}
+1 2 3 4 5 6 7 8
+ln h (x ) = ln = − ln(1 + e )
+θ (i)
+1 + e−θT x(i)
+1 θT x(i)
+ln(1 − h (x )) = ln(1 − ) = −θ x − ln(1 + e )
+θ (i)
+1 + e−θT x(i)
+1 T (i) θT x(i)
+(1)
+(2)
+\begin{align*} &\ln h_{\theta}(\mathbf{x}^{(i)}) = \ln\frac{1}{1+e^{-\theta^T \mathbf{x}^{(i)}}} = -\ln(1+e^{\theta^T \mathbf{x}^{(i)}})\\ &\ln(1-h_{\theta}(\mathbf{x}^{(i)})) = \ln(1-\frac{1}{1+e^{-\theta^T \mathbf{x}^{(i)}}}) = -\theta^T \mathbf{x}^{(i)}-\ln(1+e^{\theta^T \mathbf{x}^{(i)}}) \end{align*}
+1 2 3 4 5 6 7 8
+ln h (x ) = ln = − ln(1 + e )
+θ (i)
+1 + e−θT x(i)
+1 θT x(i)
+ln(1 − h (x )) = ln(1 − ) = −θ x − ln(1 + e )
+θ (i)
+1 + e−θT x(i)
+1 T (i) θT x(i)
+\begin{cases} \begin{split} p &= P(y=1|\mathbf{x})= \frac{1}{1+e^{-\theta^T\mathbf{X}}}\\ 1-p &= P(y=0|\mathbf{x})=1-P(y=1|\mathbf{x})= \frac{1}{1+e^{\theta^T\mathbf{X}}} \end{split} \end{cases}
+1 2 3 4 5 6 7 8
+⎩
+⎨
+⎧p
+1−p
+= P (y = 1∣x) = 1 + e−θT X
+1
+= P (y = 0∣x) = 1 − P (y = 1∣x) = 1 + eθT X
+1
+\text{Decision Boundary}= \begin{cases} 1\quad \text{if }\ \hat{y}>0.5\\ 0\quad \text{otherwise} \end{cases}
+1 2 3 4 5
+Decision Boundary = {1 if y^ > 0.5
+0 otherwise
+博客 下载 学习 社区 C知道 GitCode InsCode 会议 会员中心 消息 历史 创作
