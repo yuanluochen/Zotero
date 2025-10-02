@@ -1,0 +1,1429 @@
+Research Article
+Dynamic Modeling and Active Vibration Control of Piezoelectric Laminated Structure Based on Macrofiber Composite
+Haitao Luo ,1,2 Huadong Li ,1,2,3 Xingyuan Wu ,1,4 Guangming Liu ,1,2
+and Wei Zhang 1,2
+1State Key Laboratory of Robotics, Shenyang Institute of Automation, Chinese Academy of Sciences, Shenyang 110016, China 2Institutes for Robotics and Intelligent Manufacturing, Chinese Academy of Sciences, Shenyang 110169, China 3University of Chinese Academy of Science, Beijing 10049, China 4School of Mechanical Engineering, Shenyang Ligong University, Shenyang 110159, China
+Correspondence should be addressed to Haitao Luo; luohaitao@sia.cn
+Received 4 July 2023; Revised 19 March 2024; Accepted 2 April 2024; Published 20 April 2024
+Academic Editor: Young-Jin Cha
+Copyright © 2024 Haitao Luo et al. Tis is an open access article distributed under the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited.
+In this paper, a ground-based experimental system for solar array active vibration suppression has been established. Firstly, in order to establish an accurate model of the solar array, the solar array is regarded as a fexible cantilevered thin plate, and the corresponding dynamical equations are derived using the absolute nodal coordinate method. In addition, in this paper, the more advanced MFC piezoelectric patch is used instead of the traditional PZT piezoelectric ceramic patch. Te electromechanical coupling fnite element model of the P1-type MFC patch is established and substituted into the kinetic equation of the solar array. Finally, the accuracy of the electromechanical coupling modeling and the control efect of active vibration suppression were verifed using the PID control. A set of experimental frameworks for evaluating the active vibration suppression efect, including the free vibration test, sinusoidal perturbation test, and white noise perturbation test, as well as the analysis strategy of the test data, are established.
+1. Introduction
+Large-scale solar arrays are energy support components for spacecraft such as satellites and space stations. Tey are the most common large-scale fexible space structures. Tese structures often have complex dynamic characteristics such as ultra-low frequency, high-density modes, and strong geometric nonlinearity [1–6]. In the space environment, satellites or spacecrafts are usually deployed in scheduled orbit, and the interference caused by the manoeuvre in changing orbit or the attitude adjustment towards the sun will generate the transient vibration of the solar array [7]. Te space environment is in a state of low damping, and it is difcult for the vibration to be attenuated quickly. Prolonged and continuous vibration not only causes damage to solar arrays, but also afects the pointing accuracy and attitude stability of the satellites or spacecraft, making it take longer and consume more fuel to adjust their attitude, which has an extremely negative impact on their attitude control and
+operation [8, 9]. Te rapid vibration suppression method of solar arrays is therefore essential to ensure spacecraft pointing accuracy and attitude stability [10–15]. Vibration suppression mainly includes passive control, active control, and semiactive control. Te passive control technology is widely used due to its advantages of simple structure, easy implementation, and no need for external power supply. Te main idea is to set up a passive energy dissipation system to suppress vibration by setting up materials and devices on the structure to increase damping, stifness, and strength. Tere have been many research directions in this technique, such as tuned mass damper (TMD) and friction damper. Typical studies are described as follows. Zhao et al. [16] proposed a novel variable frictiontuned viscous mass damper (VF-TVMD), which benefts from variable friction to signifcantly reduce structural vibration over a wider frequency band compared to TVMD. Graphene platelets (GPL) have a signifcant reinforcing efect on the strength of composite cantilever beams, porous
+Hindawi Structural Control and Health Monitoring Volume 2024, Article ID 8826434, 24 pages https://doi.org/10.1155/2024/8826434
+
+
+beams, cantilever plates, and hyperbolic shallow shells with respect to the behaviour of buckling, thermal buckling, and postbuckling [17–19]. However, passive vibration suppression is considered to be nonconfgurable and cannot be tuned and controlled over a wide operating frequency band [20–22]. Active vibration suppression techniques, on the other hand, have the advantage of being adaptable and capable of achieving vibration control in the lower frequency bands. Terefore, scholars are now paying more and more attention to active vibration control technology. Tere has been a great deal of research on active vibration suppression of solar arrays. Tere are two keys to this technology: the choice of actuator and the design of the control law. Vishal et al. [23] used shape memory alloy wires as the actuator, and designed a nonlinear controller using dynamic inverse and optimal control techniques to realize the active suppression of cantilever beam vibration. Kras and Gardonio [3] proposed a new fywheel inertial actuator for a four-side solidlysupported steel plate, which has a good passive damping efect in an open loop, and obtains a better active control efect after rate negative feedback closed loop. Shen and Homaifar [24] pasted fve pairs of collocated PZT piezoelectric ceramic patches on a four-side solidly-supported thin-walled rectangular aluminum plate, and investigated control efects of rate-feedback control, hybrid fuzzy PID control, PID control designed by genetic algorithm and linear quadratic Gaussian/loop transfer recovery (LQG/LTR) control. It provides a suitable framework for optimization and robustness studies of vibration control of fexible structures. Kwak and Heo [25] applied piezoelectric ceramic patches as sensors and actuators to design a multi-input multi-output positive position feedback controller and proposed a block inverse technique to cope with modes with a larger number of actuators and sensors. Tey experimentally verifed the efectiveness and stability of the proposed vibration suppression method. Omidi et al. [26] proposed a new multiple positive feedback (MPF) control based on modifed positive position feedback (MPPF) control. Te efectiveness of the control law was verifed using a piezoelectric ceramic patch as an actuator and a clamped beam at both the ends as a test platform. Sharma et al. [27] utilized polarization-tuned piezoelectric material as the actuator and PZT patch as the sensor. Te actuator and sensor are arranged in alignment on a four-sided simply supported square plate, and the driving voltages of piezoelectric materials with diferent polarization directions in diferent operating modes and their efects on the control efect of the fuzzy logic controller are investigated in detail. Prakash et al. [28] applied piezoelectric fber reinforced composites (PFRCs) for active vibration suppression of cantilever beams, and designed the classical rate-feedback control and optimal (LQG/LQR) control law, and investigated the efects of fber volume fraction and fber orientation of PFRC on build-up time, active damping ratio, peak defection, and peak control voltage. Te minimum control voltage strategy at a given time gives the best control results. Cao et al. [29] studied the time-dependent attitude manoeuvering problem of a fexible satellite containing a rigid body and a fexible attachment. Tey also designed a shape input delay controller using
+piezoelectric actuators. Simulation results show that the designed input shaper can suppress vibration. Qiu et al. [30] investigated an active vibration control method based on acceleration sensors for a cantilever beam piezoelectric patch to suppress the frst-order and second-order bending mode vibrations of the beam. Yuan et al. [31] considered the coupling efects of rotation and translation in the dynamics of highly fexible structures and applied an improved position positive feedback control law to active vibration suppression of mobile spacecraft. Jiang et al. [32] then used a positive position feedback (PPF) control strategy for geometrically nonlinear vibration suppression of piezoelectric functionally graded graphene-reinforced laminated composite cantilever (PFG-GRLCC) rectangular plate. In semiactive control, this vibration suppression technology combines passive vibration suppression with active vibration suppression, thus reducing the design difculty and energy consumption of active control law. However, this technique is mostly used in objects with large sizes and high stifness, such as building structures and ship-bearing systems, and it is difcult to be used for vibration suppression of large fexible structures such as fexible solar arrays. For example, Soni et al. [4] utilized an electromagnetic actuator for active control of rotor bearing transverse vibration of a ship under wave resistance conditions and considered the parametric excitation of the rotor bearing system by the propagating motion. Te Four-Element/Modifed Real Proportional Integral Derivative (FE/ MRPID) control algorithm is designed based on a multielement support/suspension model and the control current and vibration response at the control position are selected as the objective function for multiobjective optimization of the control parameters, and the optimal control parameters with good robustness are obtained. After investigation, it was found that the piezoelectric materials are very suitable for active control actuators and sensors because of their positive and negative piezoelectric efects and low mass. However, the traditional PZT piezoelectric ceramic patch has insufcient force, which in itself is more fragile and difcult to use for fexible surfaces. Terefore, the NASA Langley Center [33] developed a macrofber composite (MFC) actuator. As a new smart material, MFC has the advantages of high fexibility, large strain capacity, and lightweight. Terefore, it has received more and more attention. Kovalovs et al. [34] confrmed the potential of MFC for structural vibration control through experimental and numerical results. Steige and Mokry ́ [35] developed a fnite element model of piezoelectric macrofber composites. Macroscopic values of the elastic fexibility and piezoelectric tensor were calculated, allowing the MFC actuator to be approximated as a plate-like uniform piezoelectric material. Tis greatly reduces the complexity of the fnite element model. Leniowska and Mazan [36] pasted MFC on a thin circular plate fxed by a uniform load around the circumference as an actuator and sensor and used it as a test platform. Tey used the ARX identifcation method to derive a linear model in the form of a ninth-order transfer function, and then, used the resulting model to develop a rate-feedback control algorithm, which was fnally obtained to validate the control on the test platform. Zhang
+2 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+et al. [37] equated the honeycomb plate as an orthotropic anisotropic plate. Te driving force and bending moment formulas of the MFC actuator and the governing equations of the honeycomb plate afxed with MFC actuators were derived. Tey found that the driving force and bending moment are not only related to the driving voltage and piezoelectric strain constant (d33), but also related to the elastic modulus of the honeycomb plate. Zhang et al. [38] used MFC as the actuator and proposed a PID-LQR hybrid controller. Te efectiveness of the hybrid controller under various excitation conditions was verifed by active control simulations and experiments, and the vibration response was reduced by about 31.55% after control. Wu et al. [39] used four MFC patches as actuators and sensors, and constructed a controller using Proportional Derivative (PD) and fuzzy control algorithms to suppress the frst two orders of vibration of the plate refector antenna under free vibration and sinusoidal excitation, thus verifying the efectiveness of using MFC for antenna vibration suppression. Li et al. [40] designed the LQR controller to suppress the vibration of a cantilever beam under transient and continuous disturbances with 94.4% and 65.4% amplitude reduction, respectively, using MFC as the actuator and sensor. Lu et al. [41] constructed an adaptive controller using MFC and FxLMS algorithms, and the experimental results show that their proposed controller is able to quickly suppress lowfrequency vibrations of composite sandwich beams. Terefore, in this paper, MFCs will be used as actuators and sensors to realize the active vibration suppression of large fexible solar arrays. In order to realize the active control algorithm, this paper simplifes the solar array into a cantilever plate and uses the absolute nodal coordinate method to establish its fnite element model. Te absolute nodal coordinate method was proposed by Shabana [42], which is not limited to small deformation assumptions and can be used to model the dynamics in the case of large deformation and large rotation, so it has received more and more attention from scholars. Shabana [43] frst modeled one-dimensional (one-dimensional) beam elements using the ANCF method. Shabana [43] frst modeled one-dimensional (one-dimensional) beam elements using the ANCF method. Later, Escalona et al. [44] applied ANCF to the dynamic analysis of large deformation fexible systems. Recuero and Negrut [45] classifed the ANCF elements into three categories: fully parameterized elements, gradient-defcient elements, and higher-order coordinate elements. A novel Euler–Bernoulli beam fnite element model (FEM), developed by means of the absolute nodal coordinate formulation (ANCF), is used to simulate and analyze the performance of a surface-bonded piezoelectric actuator in suppressing nonlinear transverse vibrations induced by fast slewing, and the validity of the ANCF control model is verifed with the example of PD feedback control by Gilardi et al. [46]. Firstly, in this paper, the solar array with piezoelectric patches is simplifed into a fexible cantilever beam piezoelectric lamination, and the generalized mass matrix, generalized external force matrix, and generalized elastic force matrix of the fexible cantilever beam substrate are established by using the absolute nodal coordinate method. Ten, the piezoelectric eigenstructure equation of the P1 MFC patch is established,
+and the generalized elastic force matrix of the piezoelectric layer is derived, which is substituted into the kinetic equation of the solar array. Finally, in order to verify the efectiveness of the system and prepare for the subsequent research of the active vibration suppression algorithm, a PID controller is designed. A set of test frameworks for evaluating the efect of active vibration suppression is established, including the free vibration test, sinusoidal disturbance test, and white noise disturbance test, as well as analysis strategies for test data. Te novelty of this work is that the dynamic model of the piezoelectric laminate considering the infuence of MFC mass and stifness is established based on the absolute nodal coordinate method; the ground experimental platform of the solar array is built, the closed-loop control system is designed and implemented, and the accuracy of the model and the feasibility of using MFC for active vibration control are verifed in the experiments; and the feasibility of the experimental platform built as the basic platform for subsequent aerospace project research is verifed.
+2. Absolute Nodal Coordinate Modeling of Piezoelectric Laminate Plate
+When the elastic deformation of the fexible body is greater than 20% of the structure size, this deformation can be regarded as a large deformation [47]. Considering the large deformation of large-scale fexible bodies, in the modeling process, it is necessary to abandon the assumption of small deformation and further consider the higher-order term of deformation. Te stifness matrix is no longer constant at large deformations, and the modal method cannot be used to reduce the degrees of freedom of the system. If the hybrid coordinate method is used for modeling, its computational efciency is low. Terefore, a dynamic modeling method suitable for large deformation analysis is required. In order to solve the modeling problem of fexible bodies under large deformation, Shabana proposed the absolute nodal coordinate method in 1996. Te absolute nodal coordinate method defnes the element coordinates in the inertial coordinate system, and uses the slope vector of the element node to replace the node rotation angle coordinate vector in the traditional fnite element idea. Compared with the hybrid coordinate method, this method has the following characteristics: the generalized mass matrix and the generalized external force matrix are both constant value matrices, and the nonlinear term only includes the generalized elastic force matrix. For any column vector a � [a1 a2 a3]T, there are the following rules:
+a,x � za
+zx, a,y � za
+zy, a,xy � z2a
+zxzy, (1)
+􏽥a �
+0 − a3 a2
+a3 0 − a1
+− a2 a1 0
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦. (2)
+First, establish an inertial coordinate system O − XYZ as shown in Figure 1. Te large deformation thin plate structure is discretized by the fnite element method, and the element coordinate system oe − xeyeze is established for the
+Structural Control and Health Monitoring 3
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+e-th element, where ae and be represent the length and width of the rectangular thin plate element, respectively. Let the position coordinate of any point k0 on the midplane in the element coordinate system be (x, y, 0). Based on the Kirchhof assumption, the sheet normal n0(x, y, t) remains perpendicular to the midplane. Te coordinate vector of the absolute position vector of any point k0 on the middle surface of the thin plate in the inertial coordinate system is r0(x, y, t), and the absolute position vector r of any point on the non-middle surface of the thin plate is expressed in the inertial coordinate system as follows:
+r(x, y, z, t) � r0(x, y, t) + zn0(x, y, t). (3)
+Based on the absolute node coordinate method, the absolute position vector of the corresponding point k0 on the midplane is expressed in the inertial coordinate system as follows:
+r0(x, y, t) � S(x, y)qe(t), (4)
+where S(x, y) is the shape function matrix [48], which is a 3 × 48 matrix. qe(t) is the absolute position coordinate of the element node, which is a 48 × 1 coordinate vector, including the position coordinate, the frst derivative of the position coordinate to x, y, and the second derivative of the position coordinate to x and y. Te expressions are as follows:
+S(x, y) � S1 S2 S3 S4 S5 S6 S7 S8 S9 S10 S11 S12 S13 S14 S15 S16
+􏼂 􏼃, (5)
+qe(t) � q1e(t)T q2e(t)T q3e(t)T q4e(t)T
+􏽨 􏽩T, (6)
+S1 � S1(ξ)V1(η)I3×3,
+S2 � S2(ξ)V1(η)I3×3,
+S3 � S1(ξ)V2(η)I3×3,
+S4 � S2(ξ)V2(η)I3×3,
+S5 � S3(ξ)V1(η)I3×3,
+S6 � S4(ξ)V1(η)I3×3,
+S7 � S3(ξ)V2(η)I3×3,
+S8 � S4(ξ)V2(η)I3×3,
+S9 � S3(ξ)V3(η)I3×3,
+S10 � S4(ξ)V3(η)I3×3,
+S11 � S3(ξ)V4(η)I3×3,
+S12 � S4(ξ)V4(η)I3×3,
+S13 � S1(ξ)V3(η)I3×3,
+S14 � S2(ξ)V3(η)I3×3,
+S15 � S1(ξ)V4(η)I3×3,
+S16 � S2(ξ)V4(η)I3×3.
+(7)
+where the dimensionless variables ξ and η are defned as ξ � x/ae, η � y/be, (0 ≤ ξ, η ≤ 1), respectively; I3×3 is a unit matrix, and the shape functions Si(ξ) and Vi(η) are as follows [48]:
+S1(ξ) � 1 − 3ξ2 + 2ξ3,
+S2(ξ) � ae ξ − 2ξ2 + ξ3
+􏼐 􏼑,
+S3(ξ) � 3ξ2 − 2ξ3,
+S4(ξ) � ae ξ3 − ξ2
+􏼐 􏼑,
+V1(η) � 1 − 3η2 + 2η3,
+V2(η) � be η − 2η2 + η3
+􏼐 􏼑,
+V3(η) � 3η2 − 2η3,
+V4(η) � be η3 − η2
+􏼐 􏼑.
+(8)
+And qie(t) in qe(t) is the coordinate vector of the four nodes of the element in the inertial coordinate system as follows:
+qie(t) � rk(t)T rk,x(t)T rk,y(t)T rk,xy(t)T
+􏽨 􏽩T, (9)
+where rk is the coordinate vector of the node in the inertial coordinate system. rk,x and rk,y are the expressions of the frst derivative of rk to the coordinates x and y of the element coordinate system, respectively, in the inertial coordinate system, rk,xy is the second derivative of rk to the coordinates x and y of the element coordinate system in the inertial coordinate system expression.
+4 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+Let q(t) be the overall absolute node coordinate array, which is a 12N × 1 vector, and N is the number of nodes on the entire board; the relationship between qe(t) and q(t) is
+qe(t) � Beq(t), (10)
+where Be is the Boolean matrix of element e, which is a 48 × 12N matrix. Based on the Kirchhof hypothesis, the coordinate vector n0 of the unit normal vector of the midplane in the inertial coordinate system can be expressed as follows:
+n0 � n
+n, (11)
+where
+n � r0,x × r0,y � €r0,xr0,y, (12)
+n�
+����
+nTn
+􏽱
+. (13)
+Te relationship between Green’s strain array and absolute displacement is
+ε�
+ε11
+ε22
+2ε12
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+�
+1
+2 rT
+,xr,x − 1
+􏼐􏼑
+1
+2 rT
+,yr,y − 1
+􏼐􏼑
+rT
+,x r,y
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+. (14)
+Substitute equation (3) into equation (14), ignoring the terms related to z2, we obtain
+ε�
+1
+2 rT
+0,xr0,x − 1
+􏼐 􏼑 + zrT
+0,x n0,x
+1
+2 rT
+0,yr0,y − 1
+􏼐 􏼑 + zrT
+0,yn0,y
+rT
+0,xr0,y + zrT
+0,xn0,y + zrT
+0,yn0,x
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+. (15)
+Considering that the normal n0 remains perpendicular to the midplane, we have:
+rT
+0,xn0 � 0 rT
+0,yn0 � 0. (16)
+Taking the derivative of equation (16) with respect to x, we obtain
+rT
+0,xn0,x + rT
+0,xxn0 � 0 rT
+0,yn0,x + rT
+0,yxn0 � 0. (17)
+Taking the derivative of equation (16) with respect to y, we obtain
+rT
+0,xn0,y + rT
+0,xyn0 � 0 rT
+0,yn0,y + rT
+0,yyn0 � 0. (18)
+Substituting equations (17) and (18) into equation (15), and r0T,yx � r0T,xy, the Green strain can be decomposed into the following form:
+ε � ε0 − zκ, (19)
+k0
+h
+xe
+ye
+ze
+Oe
+X
+Y
+Z
+O
+r (x, y, z, t0)
+ae
+be
+Figure 1: Tin rectangular plate with large deformation.
+Structural Control and Health Monitoring 5
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+where ε is the in-plane strain array of the midplane, which can be expressed as follows:
+ε0 �
+ε011
+ε022
+2ε012
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+�
+1
+2 rT
+0,xr0,x − 1
+􏼐􏼑
+1
+2 rT
+0,yr0,y − 1
+􏼐􏼑
+rT
+0,xr0,y
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+. (20)
+κ is the curvature array of the midplane:
+κ�
+κ11
+κ22
+κ12
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦ �
+rT
+0,xx n0
+rT
+0,yy n0
+2rT
+0,xyn0
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦. (21)
+Te relationship between the stress σ � [σ11σ22σ12]T and the strain of the plate element is
+σ � Dε, (22)
+where
+D� 1
+1 − v12v21
+E1 v21E1 0
+v12E2 E2 0
+0 0 1 − v12v21􏼁G12
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+, (23)
+where E1 and E2 are the elastic moduli along the principal axis direction, G12 is the in-plane shear modulus, v12 and v21 are Poisson’s ratios, which satisfy the relation v21E1 � v12E2.
+2.1. Generalized Mass Matrix. When calculating the virtual work of the inertial force, the change of the absolute coordinates along the ze direction of the element coordinate system can be ignored. By applying the principle of virtual work, the virtual work performed by the inertial force of the plate element e on the virtual displacement δr0 is calculated as
+δWie � − 􏽚
+Ve
+ρδrT€rdVe � − 􏽚
+Ve
+ρδrT
+0 €r0dVe. (24)
+By substituting equation (4) into equation (24), we can obtain that
+δWie � − δqT
+e Me€qe, (25)
+where Me is an element mass matrix, which is a 48 × 48 square matrix, and its expression is
+Me � h 􏽚
+ae
+0
+􏽚
+be
+0
+ρSTSdydx. (26)
+Finally, the virtual work performed by the inertial force of the overall rectangular thin plate is
+δWi � − 􏽘
+Ni
+e�1
+􏽚
+Ve
+ρδrTr€dVe � − δqTM€q, (27)
+where Ni is the number of plate elements and M is the generalized mass matrix of the overall rectangular thin plate, and its expression is as follows:
+M�􏽘
+Ni
+e�1
+BT
+e MeBe. (28)
+2.2. Generalized External Force Array of Concentrated Force. Suppose a concentrated force acts on point P on the midplane, the concentrated force is expressed as F in the inertial coordinate system, and the relationship between the absolute position vector of point P and the absolute node coordinate array of the overall thin plate is r0p � Spq. Ten, the virtual work performed by concentration is
+δWF � rT
+0pF � δqTQF. (29)
+Finally, the generalized external force matrix corresponding to the concentrated force can be obtained as QF � ST
+pF, where Sp � SBp and Bp is the Boolean matrix of the element where the point P is located.
+2.3. Generalized Elastic Force Matrix for Tin Plate. According to the principle of virtual displacement, both real and virtual displacements satisfy the geometric equation (14) between displacement and strain. Since the virtual displacement (the variation of the displacement) causes the corresponding virtual strain (the variation of the strain), using equation (19), we can obtain the following equation:
+δε � δε0 − zδκ. (30)
+First, we solve the midplane’s in-plane strain variation δε0 caused by the displacement variation δqe, which can be obtained by equation (20) as
+δε0 � Hδqe, (31)
+where
+H�
+rT
+0,x S,x
+rT
+0,yS,y
+rT
+0,xS,y + rT
+0,yS,x
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦. (32)
+Ten, the variation of equation (21) is obtained as follows:
+6 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+δκ � δ
+rT
+0,xx n0
+rT
+0,yy n0
+2rT
+0,xy n0
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦ � Gδqe, (33)
+where it is necessary to calculate the variation of equations (11)–(13) to obtain the following expressions:
+δn � δ􏽥r0,xr0,y + 􏽥r0,xδr0,y � − 􏽥r0,yδr0,x + 􏽥r0,xδr0,y � Bδqe, (34)
+δn � nTδn
+n � nTB
+n δqe. (35)
+Ten, we obtain
+G � G1 + G2 + G3,
+G1 � 1
+n
+rT
+0,xx B
+rT
+0,yyB
+2rT
+0,xyB
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+,
+G2 � 1
+n
+nTS,xx,
+nTS,yy,
+2nTS,xy,
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+,
+G3 � − 1
+n2 κnTB.
+(36)
+B � − r􏽥0,yS,x + 􏽥r0,xS,y. (37)
+Te virtual work performed by the elastic force of the plate element is
+δWfe � − 1
+2􏽚
+Ve
+δεTσdV � − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+􏽚
+h/2
+− h/2
+δεTσdzdydx.
+(38)
+We then substitute equation (30) into equation (38) to obtain
+δWfe � − 1
+2􏽚
+V
+δεT
+0 − zδκT
+􏼐 􏼑D ε0 − zκ􏼁dV. (39)
+Te expression of the virtual work performed by the elastic force of the plate element is detailed in the Appendix. We substitute equations (31) and (33) into equation (39) to obtain
+δWfe � δqT
+e Qfe, (40)
+where Qfe is the element generalized elastic force matrix, and its expression is given in Appendix Ten, the virtual work performed by the elastic force of the overall thin plate is
+δWf � 􏽘
+Ni
+e�1
+δWfe � δqTQf. (41)
+Finally, the generalized elastic force matrix of the overall thin plate is obtained as
+Qf � 􏽘
+Ni
+e�1
+BT
+e Qfe. (42)
+2.4. Piezoelectric Constitutive Equation of MFC P1-Type Patch. Piezoelectric ceramics have a wide range of applications in the vibration suppression of cantilever beams, but piezoelectric ceramics have high rigidity and small deformation, which makes it difcult to apply to large deformations or curved surfaces [49]. Terefore, NASA designed a new composite material based on piezoelectric ceramics, namely, MFCs. Since MFCs are piezoelectric ceramics in essence, MFCs also have positive and negative piezoelectric efects. Te MFC itself has a certain degree of fexibility, and the stress generated by the MFC of the same area is approximately ten times that of piezoelectric ceramics. In this paper, based on the positive and negative piezoelectric efects, MFCs are used as actuators and sensors. Te internal structure of the MFC is relatively complicated [50]. Te MFC is made up of 3 parts, and its structure and working mode are shown in Figure 2. When the thin plate vibrates, it can be thought of as a small strain, with a large deformation motion. Terefore, the MFC pasted at the root of the cantilevered thin plate is regarded as subjected to small strain, and its electromechanical coupling characteristics can be described by the linear piezoelectric eigenstructure equation. Tere are four piezoelectric equations, depending on the boundary conditions; the second type of piezoelectric equation is used here, taking strain εk(k � 1, 2, . . . , 6) and electric feld strength Ej(j � 1, 2, 3) as independent variables and stress σi and electric displacement Dl as dependent variables. In reality, the electric feld distribution of MFC is very complicated [51]. In order to simplify the model, the following assumptions are made [52]: (a) the electric feld between the electrodes is a uniformly distributed strong electric feld; (b) the deformation of the MFC lies within its elastic deformation; and (c) the MFC is an orthotropic anisotropic material. d33 mode is obtained with the electric feld direction parallel to the fber direction, and the strength of the remaining two directions is zero. Te electric feld direction of the MFC of type d33 is parallel to the fber direction, and the strength of the electric feld in the remaining 2 directions is 0. Based on the abovementioned assumptions, the simplifed piezoelectric constitutive equation of the MFC is obtained as follows:
+σi � CE
+ikεk − ejiEj(i � 1, 2, . . . , 6),
+Dl � elkεk + εE
+lj Ej(l � 1, 2, 3).
+(43)
+Structural Control and Health Monitoring 7
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+where CE
+ik � (zσi/zεk)E is the short-circuit elastic stifness coefcient, where the superscript E represents the parameter obtained under the condition of constant electric feld or
+zero electric feld, and the unit is N/mm2. eji � (zσi/zEj)E, elk � (zDl/zεk)E is the piezoelectric stress constant, which is the ratio of the stress change caused by the change of electric feld intensity to the change of electric feld intensity under constant strain, or the ratio of the change in electrical displacement caused by the change in strain to the change in strain under a constant electric feld. εE
+lj is the
+mechanical clamping dielectric constant, that is, the dielectric constant under constant strain. Ten, the matrix expression of the piezoelectric equation is
+σ1
+σ2
+σ3
+σ4
+σ5
+σ6
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+�
+CE
+11 CE
+12 CE
+13 CE
+14 CE
+15 CE
+16 CE
+21 CE
+22 CE
+23 CE
+24 CE
+25 CE
+26 CE
+31 CE
+32 CE
+33 CE
+34 CE
+35 CE
+36 CE
+41 CE
+42 CE
+43 CE
+44 CE
+45 CE
+46 CE
+51 CE
+52 CE
+53 CE
+54 CE
+55 CE
+56 CE
+61 CE
+62 CE
+63 CE
+64 CE
+65 CE
+66
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+ε1
+ε2
+ε3
+ε4
+ε5
+ε6
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+−
+e11 e12 e13
+e21 e22 e23
+e31 e32 e33
+e41 e42 e43
+e51 e52 e53
+e61 e62 e63
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+E1
+E2
+E3
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦,
+D1
+D2
+D3
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦ �
+e11 e12 e13 e14 e15 e16
+e21 e22 e23 e24 e25 e26
+e31 e32 e33 e34 e35 e36
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+ε1
+ε2
+ε3
+ε4
+ε5
+ε6
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
++
+εE
+11 εE
+12 εE
+13 εE
+21 εE
+22 εE
+23 εE
+31 εE
+32 εE
+33
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+E1
+E2
+E3
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦.
+(44)
+Te abovementioned equation can be abbreviated as follows:
+σ � CEε − eTE,
+D � eε + εEE,
+(45)
+where e is the piezoelectric stress constant matrix, εE is the dielectric constant matrix under constant strain, and CE is the stifness matrix under constant electric feld strength. Te polarization direction of the piezoelectric layer of the MFC P1-type is parallel to the x-axis direction in the element coordinate system, and an external electric feld is only applied in the x-axis direction. So, the piezoelectric constitutive equation can be simplifed as follows:
+σ1
+σ2
+σ6
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦ �
+CE
+11 CE
+12 0 CE
+21 CE
+22 0
+0 0 CE
+66
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+ε1
+ε2
+ε6
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦ −
+e11
+0
+0
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦E1,
+D1 � e11 0 0
+􏼂􏼃
+ε1
+ε2
+ε6
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦ + εE
+11E1,
+(46)
+where
+CE �
+CE
+11 CE
+12 0
+CE
+21 CE
+22 0
+0 0 CE
+66
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+�
+Em1
+1 − μ12μ21
+μ12Em2 1 − μ12μ21
+0
+μ21Em1 1 − μ12μ21
+Em2
+1 − μ12μ21
+0
+0 0 Gm12
+⎡⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎢⎣
+⎤⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎥⎦
+, (47)
+where Em1 and Em2 are the elastic moduli of the MFC along the fber and electrode directions, respectively, Gm12 is the in-plane shear modulus of the MFC, and μ12 and μ21 are Poisson’s ratios. If σ1 � σ11, σ2 � σ22, σ6 � σ12, ε1 � ε11,
+ε2 � ε22, ε6 � ε12, and eni � dnjCE
+ji , then e11 � d11CE
+11; in MFC
+P1-type patch, E1 � V1/d, where V1 is the voltage applied in the x-axis direction and d is the distance between two adjacent cross electrodes. When the shape and size of the piezoelectric material are certain, the dielectric constant can be determined by measuring the inherent capacitance C of the piezoelectric material, so we have εE
+11 � Cd/S � (Cd/behs).
+w
+Iw
+I
+I
+I
+z1
+x1
+y1
+O1 3
+2
+1
+PZT Fiber
+Electrode
+Expoxy resin
+Figure 2: Te working principle of MFC material.
+8 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+Te adjacent cross electrodes of the MFC P1-type patch are equivalent to a capacitor, and V � Q/C, where Q is the amount of charge. Q � Qse � 􏽒Vs
+DdV is the amount of charge generated by the sensor element without an external electric feld, so Vse � Qse/C. Tus, the voltage generated by the sensor element is
+Vse �
+􏽒VseeεdV
+C�
+􏽒Vsee ε0 − zκ􏼁dV
+C � Qouteqe, (48)
+where Qoute is the output matrix of the sensor element, and its expression is as follows:
+Qoute �
+􏽒Vsee(H − zG)dV
+C �􏽚
+ae
+0
+􏽚
+be
+0
+􏽚
+− h/2
+− h/2− hs
+e(H − zG)
+C dzdydx.
+(49)
+Ultimately, the output equation for the overall sensor patch is as follows:
+Vs � Qoutq, (50)
+where Qout is the output matrix of the overall sensor, and its expression is as follows:
+Qout � 􏽘
+Ns
+e�1
+QouteBse. (51)
+Te research on the MFC paste position is mostly based on the mathematical model of the cantilever plate established by fnite element analysis, which is used as a theoretical basis to determine the MFC paste position [53–55]. In this paper, through Ansys analysis, it is determined based on the maximum strain energy theory. Te structure and material parameters of the solar array are shown in Table 1. Te size of the solar array model used in this paper is the actual size of the solar array of the “sunfower” satellite. Using Ansys software to carry out vibration modal analysis of the solar array model, the frst-order strain energy analysis of the solar array is shown in Figure 3. By applying the maximum strain energy theory and setting the software,
+Figure 3 shows that the maximum strain energy is at the end of the fxed position and the hinge connection position, which are the best positions for applying the MFC. Table 2 shows the modal analysis table of the frst 2 modes of the solar array through modal analysis, including the specifc vibration frequency value of each mode. Te corresponding mode shapes are shown in Figures 4 and 5, respectively.
+2.5. Generalized Elastic Force of Piezoelectric Layer. From the constitutive equations, the elastic potential energy expressions of the sensor elements can be obtained as
+δWse � − 1
+2􏽚
+Vs
+δεTσdV � − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+􏽚
+− h/2
+− h/2− hs
+δεTσdzdydx, (52)
+δWse � − 1
+2􏽚
+Vs
+δεT CEε − eTE
+􏼐 􏼑dV. (53)
+Since no voltage is applied to the sensor, so we have
+δWse � − 1
+2􏽚
+Vs
+δεTCEεdV, (54)
+By substituting equation (19) into equation (53), we obtain
+δWse � − 1
+2􏽚
+Vs
+δεT
+0 − zδκT
+􏼐 􏼑CE ε0 − zκ􏼁dV. (55)
+Similarly, the elastic potential energy of the driver elements can be expressed as
+δWae � − 1
+2􏽚
+Va
+δεT CEε − eTE
+􏼐 􏼑dV
+�−1
+2􏽚
+Va
+δεT
+0 − zδκT
+􏼐 􏼑CE ε0 − zκ􏼁dV + 1
+2􏽚
+Va
+δεT
+0 − zδκT
+􏼐 􏼑eTEdV.
+(56)
+Te virtual work performed by the elastic force of the sensor element and the actuator element is detailed in Appendix A. We substitute equations (31) and (33) into equation (55) to obtain
+δWse � δqT
+e Qse, (57)
+where Qse is the generalized elastic force matrix of the sensor element, and its expression is
+Qse � − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+HTAsε0dydx + 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+HTBsκdydx
++1
+2􏽚
+ae
+0
+􏽚
+be
+0
+GTBsε0dydx − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+GTCsκdydx.
+(58)
+Ten, the virtual work performed by the generalized elastic force of the overall sensor is
+Table 1: Material parameters of the components of the vibration suppression system.
+Components Size (mm) Density (kg/m3) Elastic modules
+(GPa)
+Canvas model 660 ∗ 480 1865 64.64 M4312-P1 42 ∗ 12 5440 30.34 M5628-P1 56 ∗ 28 5440 30.34 Hinge structure M6 7930 
+Structural Control and Health Monitoring 9
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+δWs � 􏽘
+Ns
+e�1
+δWse � δqTQs. (59)
+Te generalized elastic force matrix of the sensor is Qs � 􏽐Ns
+e�1 BT
+seQse, where Ns is the number of sensor elements and Bse is the Boolean matrix of the sensor element.
+We substitute equations (31) and (33) into equation (56) to obtain
+δWae � δqT
+e Qae (60)
+where Qae is the generalized elastic force matrix of the actuator element, and the expression is given in Appendix.
+1.164E-03 1.035E-03 9.057E-04 7.766E-04 6.474E-04 5.182E-04 3.890E-04 2.598E-04 1.306E-04 1.377E-06
+(a)
+1.175E+01 1.044E+01 9.137E+00 7.832E+00 6.528E+00 5.223E+00 3.918E+00 2.614E+00 1.309E+00 4.333E-03
+(b)
+Figure 3: Te strain energy distribution of the frst-order vibration mode of the solar array. (a) Te strain energy distribution of the frstorder vibration mode of the single-board solar array. (b) Te strain energy distribution of the frst-order vibration mode of the double-board solar array.
+Table 2: Modal analysis table of the solar array model.
+Board structure type Order of frequency Frequency (Hz)
+Single board First-order 2.360480E + 00 Single board Second-order 7.698756E + 00 Double board First-order 7.745260E − 01 Double board Second-order 4.352426E + 00
+6.722E+01 5.975E+01 5.228E+01 4.481E+01 3.734E+01 2.987E+01 2.241E+01 1.494E+01 7.469E+00 0.000E+00
+(a)
+9.370E+01 8.328E+01 7.287E+01 6.246E+01 5.205E+01 4.164E+01 3.123E+01 2.082E+01 1.041E+01 0.000E+00
+(b)
+Figure 4: Te mode shapes of the single-board solar array. (a) First-order mode shape of the single-board solar array. (b) Second-order mode shape of the single-board solar array.
+4.045E+01 3.596E+01 3.146E+01 2.697E+01 2.247E+01 1.798E+01 1.348E+01 8.989E+00 4.495E+00 0.000E+00
+(a)
+5.144E+01 4.573E+01 4.001E+01 3.430E+01 2.858E+01 2.286E+01 1.715E+01 1.143E+01 5.716E+00 0.000E+00
+(b)
+Figure 5: Te mode shapes of the double-board solar array. (a) First-order mode shape of the double-board solar array. (b) Second-order mode shape of the double-board solar array.
+10 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+Ten, the virtual work performed by the generalized elastic force of the overall driver is
+δWa � 􏽘
+Na
+e�1
+δWae � δqTQa. (61)
+Te actuator generalized elastic force matrix is
+Qa � 􏽐Ns
+e�1BT
+aeQae, where Na is the number of actuator elements and Bae is the Boolean matrix of the actuator element.
+2.6. Piezoelectric Laminate Dynamics Equation. According to the principle of virtual work, the dynamic variational equation is
+δWi + δWF + δWf + δWs + δWa � 0. (62)
+Substituting equations (27), (29), (41), (59), and (61) into equation (62) to obtain
+δqT − M€q + QF + Qf + Qs + Qa) � 0.
+􏼐 (63)
+Let the constraint equation of the piezoelectric laminate be
+Φ(q, t) � 0. (64)
+Ten, the Lagrangian dynamics equation of the frst kind with Lagrangian multipliers is
+Mq€ + ΦT
+q λ � QF + Qf + Qs + Qa, (65)
+Qc � − ΦT
+q λ is the generalized constraint force, Φq is the Jacobian matrix of the constraint equation, and λ is the array of Lagrange multipliers. We combine equations (64) and (65) to form a diferential-algebraic hybrid equation as follows:
+Φ(q, λ) � ψ(q) + ΦT
+qλ
+Φ
+⎡⎣ ⎤⎦ � 0, (66)
+where ψ(q) � M€q − (QF + Qf + Qs + Qa).
+3. Experimental Research on Active Vibration Control
+3.1. Introduction to the Experimental System. Te active vibration control experiment includes the vibration suppression experiment on single and double boards. Te active vibration suppression system consists of fve parts: the host computer control system, the signal acquisition system, the data conversion system, the signal drive system, and the actuator. LabVIEW was used to develop the host computer control system, and the host computer was mainly responsible for signal processing. Te upper computer receives the USB-6002 signal, and the information is the 0–10 V voltage signal output by the laser displacement sensor. Te MFC is calibrated by the laser displacement sensor, so that the signal processed by LabVIEW can match the signal simulated by Simulink, and the PID control parameters
+calculated in Simulink can also be used in the actual control system. To ensure the identity of the initial vibration, a fxed initial excitation signal needs to be given. Te signal acquisition system includes two kinds of sensors: MFC sensors and laser displacement sensors. Te main purpose of doing so is to use the laser displacement sensor to calibrate the MFC sensor. Spatially, it is unrealistic to use laser displacement sensors to measure the vibration displacement of solar arrays. When the MFC is used as a sensor, the directly measured voltage will be distorted due to the input resistance, so two 1MΩ resistors are used to divide the voltage collected by the MFC. Te highest voltage tested for USB-6002 is 10 V. We input the divided signal into USB-6002, so that the distortion can be avoided. Te data conversion system adopts the digital board USB-6002 of NI Company, which can collect 8 channels of analog signals with a resolution of 16 bits, and the maximum sampling rate can reach 50KS/s. Te board has two 16-bit D/A conversion outputs, which meets the requirements in this experiment. Te signal driving system adopts a MFC-compatible driver, which is an AMD2012 − CE2/3 driver board produced by Smart Material. Te maximum output power of the driver board can reach 4 W, and the output voltage is − 500V − +1500V. Te actuator is an MFC actuator. Tere are two types of MFCs used in this subject, M-5628-P1 and M-4312-P1, and their ultimate output forces are 340N and 120N, respectively. Te single-board experimental system is shown in Figure 6, where the pasting position of the MFC actuator and sensor and the installation position of the laser displacement sensor are marked in detail in the fgure. Te equipment installation position of the double-board vibration experimental system is shown in Figure 7, and the structure of the entire system can be observed in more detail in conjunction with Figure 6. Te control fowchart of the whole system is shown in Figure 8.
+3.2. Active Control Algorithm Based on PID Self-Tuning. Without considering the nonlinearity of the board structure, the vibration of the solar array can be approximated as a second-order system [56]. Te transfer function of a typical second-order system is
+H(s) � ω2
+n
+s2 + 2ζωns + ω2
+n
+, (67)
+where ζ is the damping ratio and ωn is the free vibration frequency. Using the idea of system identifcation, the free vibration waveform of the solar array is measured by the laser displacement sensor. Te experimental prototype of the solar array is shown in Figure 9, and the single arrays are connected by hinges. Since the starting range of the laser displacement sensor, ZLDS103-250 is 65 mm and the range is 250 mm, and the vibration of the solar array is reciprocating near the equilibrium position, and the distance between the solar array and the laser displacement sensor is 190 mm.
+Structural Control and Health Monitoring 11
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+Te free vibration waveform of the solar array is measured by the laser displacement sensor. Te free vibration waveform of the single board is shown in Figure 10, and the
+free vibration waveform of the double board is shown in Figure 11. LabVIEW was used as the host computer for data acquisition. According to the vibration shape of the solar
+5ackM
+ ́GVMasMsensor
+8 ́(M(river  ́GVMbending actuator
+ ́easuringMpointMofMlaser displacementMsensor
+ ́GVMtorque actuator
+usbITFFq
+Figure 6: Single-board experimental system.
+’everseMsideMof plate
+—ibrationMcontrol equipment
+)xciterMcontrol equipment
+—ibrationMexciter
+Figure 7: Double-board experimental system.
+Vomputer
+(f8Mconversion
+SighMpressure driveMplate
+8f(Mconversion
+usbITFFq
+’f fMor
+’q fMor
+WartialMvoltage resistance
+ ́GVMasMactuator
+ ́GVMasMsensor
+NaserMdisplacementMsensor
+Figure 8: Control fowchart of the experimental system.
+12 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+array obtained through ANSYS analysis, the vibration frequency of the solar array is very low, so the sampling rate is set to 1KS/s, that is, the sampling period is Tc � 0.001s, which is sufcient to meet the requirements. In the fgure, the abscissa represents the number of sampling points, representing time, and the ordinate represents the amplitude of vibration, and its unit is mm. It is known that when the second-order system works under the condition of underdamping, its vibration response is
+y(t) � e− ζωnt sin ωdt + arc tan
+����� 1 − ζ2
+􏽱
+ζ
+⎛⎜⎜⎝ ⎞⎟⎟⎠, (68)
+where ωd �
+����� 1 − ζ2
+􏽱
+ωn is the damped natural frequency. In the free vibration waveforms with a period of T as shown in Figures 10 and 11, we take the peak values y1 and y2 at the two moments t1 and t2, the diference between the two moments is k periods, and the corresponding sampling points are n1 and n2, respectively. From equation (68), we can obtain that
+y1
+y2
+� e− ζωnt1
+e− ζωn t1+kT
+( ) � ekζωnT, (69)
+where
+ωnT � ωn
+2π
+ωd
+� �2�π��� 1 − ζ2
+􏽱 , (70)
+Substituting equation (70) into equation (69), we obtain
+ζ � (1/k) ln y1/y2􏼁
+�������������������� 4π2 +􏼂(1/k) ln y1/y2􏼁􏼃2
+􏽱 . (71)
+We selected two points in the Figure 10: (nS1, yS1) and (nS2, yS2), nS1 � 415, yS1 � 38.9894, nS2 � 5624, yS2 � 5.2310, kS � 14, and the subscript S represents the single board. By substituting the abovementioned points into equation (71), the damping ratio obtained is ζS � 0.023. According to the sampling point and the sampling period, the vibration period and frequency of the single-board solar array can be calculated as follows:
+TS � nS2 − nS1􏼁Tc
+kS
+� 0.372s, (72)
+fS � 1
+TS
+� 2.688Hz. (73)
+From equation (70), we can obtain that
+ωnS � 2π
+����� 1 − ζ2
+S
+􏽱
+TS
+� 16.936. (74)
+Substituting damping ratio ζS and free vibration frequency ωnS into equation (67), the transfer function of the system can be obtained as follows:
+HS(s) � 286.828
+s2 + 0.779s + 286.828. (75)
+We selected two points in the Figure 11: (nD1, yD1) and (nD2, yD2), nD1 � 1034, yD1 � 112.588, nD2 � 31808, yD2 � 2.742, kD � 18, and the subscript D represents the double boards. By substituting the abovementioned points into equation (71), the damping ratio obtained is ζD � 0.033.
+WasteMpositionMof  ́GV
+NaserMmeasuring point
+(a)
+WasteMpositionMofM ́GV NaserMmeasuringMpoint
+(b)
+Figure 9: Installation position of the solar array boards. (a) Single-board model. (b) Double-board model.
+8mplitudeM©mmT
+F
+ZF
+nS1 = 415, yS1 = 38.9894
+nS2 = 5624, yS2 = 5.2310
+-50 0 1000 2000 3000 4000 5000 6000 7000 8000 9000 Sampling (point)
+Figure 10: Te free vibration waveform of the single-board experiment.
+Structural Control and Health Monitoring 13
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+According to the sampling point and sampling period, the vibration period and frequency of the double-board solar array can be calculated as follows:
+TD � nD2 − nD1􏼁Tc
+kD
+� 1.710s, (76)
+fD � 1
+TD
+� 0.584Hz. (77)
+From equation (70), we can get the following:
+ωnD � 2π
+������ 1 − ζ2
+D
+􏽱
+TD
+� 3.678. (78)
+Substituting damping ratio ζD and free vibration frequency ωnD into (67), the transfer function of the system can be obtained as follows:
+HD(s) � 13.528
+s2 + 0.241s + 13.528. (79)
+PID control is the most mature and widely used control algorithm. It can also be combined with various control concepts to solve practical problems [57–59]. Te PID control parameters in this paper are obtained using the MATLAB optimization toolbox in conjunction with Simulink simulation, resulting in a relatively reliable set of control parameters in a very short period of time. What is used here is the PID self-tuning method, which can quickly obtain the PID control parameters. Since the control time of the double-board experiment is longer, the double-board experiment is taken as an example here. In the vibration control experiments, four actuators are used in this paper, of which the two pasted on the root are bending actuators and the remaining two are torque actuators. Te MFC torsional actuator is mainly used in the double-board system, whose frst-order vibration modes are mainly the bending strain at the root and the torsional strain at the joint of the two boards, so it is reasonable to drive these two actuators using the PID control law that controls the frst-order mode. Te
+control efect of the control experiment also verifes the feasibility and efectiveness of the scheme. In Simulink, we add the free vibration model of the solar array and the PID control module. Te overall block diagram is shown in Figure 12. As shown in Figure 12, the input signal is a step signal, and its value is
+r(t) � 0, t < 0,
+125, t ≥ 0.
+􏼨 (80)
+Te fnal value of 125 in the formula is 1/2 of the measurement limit range of the laser displacement sensor, which is set as the position of the zero point in the experiment. To facilitate observation and understanding, we subtract 125 before the result is input to the oscilloscope module, so that we can observe in the Simulink oscilloscope that the measurement data change based on y � 0. Te main basis of the PID control is the control deviation e(t) obtained through the input signal r(t) and the output signal y(t), that is,
+e(t) � r(t) − y(t). (81)
+Te PID controller is a kind of linear controller that carries on the linear combination of the deviation proportion, integral, and derivative, and uses it as the control quantity to control the controlled object. Te control law is as follows:
+u(t) � Kp e(t) + 1
+T􏽚
+1
+0
+e(t)dt + Td
+de(t)
+dt
+􏼢 􏼣. (82)
+Its transfer function is
+G(s) � U(s)
+E(s) � Kp 1 + 1
+Tis + Tds
+􏼠 􏼡, (83)
+where Kp is the proportional coefcient, Ti is the integral time constant, and Td is the diferential time constant. In the PID module of Simulink, the control formula is represented as follows:
+G(s) � P + I 1
+s+D N
+1 + N(1/s), (84)
+where P is the proportional parameter, I is the integral parameter, D is the diferential parameter, and N is the flter coefcient. By comparing equations (83) and (84), we can see the diference between Simulink’s PID parameters and the coefcients of the transfer function. Of course, what we need is the PID parameters. We input the coefcients of equation (79) in the controlled object module in the form of an array. To observe the control efect of the control input, it is necessary to introduce two sets of the same transfer function, one of which does not introduce the PID control output. After setting the parameters of the input module, PID module, and controlled object module, Simulink can be used for parameter self-tuning, to obtain a set of more appropriate PID control parameters. In MATLAB 2020a, it is convenient to use the Simulink toolkit to obtain the desired parameters.
+8mplitudeM©mmT
+nD1 = 1034, yD1 = 112.588
+nD2 = 31808, yD2 = 2.742
+-50
+50
+-100
+100
+0
+0 0.5 1 1.5 2 2.5 3 3.5 4 4.5 5 ×104
+Sampling (point)
+Figure 11: Te free vibration waveform of the double-board experiment.
+14 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+3.3. Model Validation. Te time and frequency domain results of the solar panel free vibration experiment and model simulation are shown in Figures 13 and 14. Comparing the results of the simulation calculation using MATLAB and the data collected from the free vibration experiment, the frst-order natural frequency and corresponding amplitude obtained by the simulation calculation are basically consistent with the experimental measurement results. Terefore, the modeling accuracy of the absolute nodal coordinate method can be guaranteed in the lowfrequency range, which can meet the needs of active control research.
+3.4. Evaluation of the Vibration Suppression Efect of Solar Arrays. Te previous experimental waveform shows that the frst-order natural frequency of the solar array is 0.584Hz. To ensure that the initial excitation signal of the system vibration remains consistent, the excitation frequency is set in the host computer to be the same as the frst-order natural frequency. Te excitation signal is a sine signal with an amplitude of 5V and a frequency of 0.584Hz. Te host computer can obtain three groups of vibration signals, of which two groups are collected by MFC sensors, and the other group is collected by laser displacement sensors. Te signal collected by the laser displacement sensor is mainly used for parameter calibration and to judge whether the data collected by the MFC sensor are reliable. Te initial control parameters obtained through Simulink based on the transfer function are as follows: Kp � 2.962, Kd � 1.064, and Ki � 0.869, which have poor control efects on steady-state low amplitude vibration as shown in the line “initial PID” in Figure 15. Terefore, it is necessary to obtain more suitable control parameters based on the fnite element model obtained above. Based on the initial control parameter values, corresponding control parameter ranges were set, namely, Kp, Kd, and Ki belonging to [0.001, 10], and the control output voltage range was set to [− 1000 V, +1000 V]. A genetic algorithm was applied based on the abovementioned fnite element model to fnally obtain the tuned PID control parameters as follows: Kp � 0.424, Kd � 0.512, and Ki � 0.724. Te specifc process is shown in Figure 16, and the control efect is shown by the line “tuned PID” in Figure 15. In the experiment, single-board and double-board experiments were conducted. Te experimental results are shown in Figure 15, comparing the vibration attenuation of solar cell arrays with initial and tuned PID control and
+without control. Te stable time is defned as the time it takes for the amplitude to decay to less than 3% of the initial amplitude. From Figure 15, it can be seen that the initial PID controller obtained based on the transfer function can quickly attenuate large vibrations, and the stable times of the single-board experiment and double-board experiment were 4.7 s and 5 s, respectively. However, there is persistent lowamplitude vibration, and the control efect is not satisfactory. After applying tuned PID control, the stable times of the single-board experiment and double-board experiment were 2.5 s and 5 s, respectively, which were reduced by 85% and 75% compared to the stable time in the uncontrolled state. Te tuned PID controller obtained based on the ANCF fnite element model ensures fast attenuation of vibration while suppressing low amplitude vibration, achieving satisfactory control results. To verify the active vibration suppression efect of solar arrays in interference environments, sinusoidal interference and white noise interference were introduced. Sinusoidal interference is a sine signal with an amplitude of 5 V and a frequency of 0.584 Hz. Figure 17 shows the comparison of the vibration of solar arrays with or without control under the condition of introducing sinusoidal interference. After the control is applied, the stabilization times of the single-board experiment and the two-board experiment are 3.5 s and 6 s, respectively. In the uncontrolled state, the stabilization times of the single-board experiment and the double-board experiment are 8 s and 11 s, respectively, and there are residual vibrations with relatively large amplitudes after stabilization. In this case, the active control algorithm’s ability to attenuate the residual vibration amplitude is more important. Tis ability is measured by the vibration suppression stabilization amplitude defned as the stabilization amplitude of the controlled object under continuous excitation by sinusoidal and white noise disturbances. After stabilization, the vibration amplitudes of the solar arrays in the single-board experiment and the double-board experiment are 1.5 mm and 4 mm, respectively, which are decreased by 83.7% and 75%, respectively, compared with the vibration amplitudes under the uncontrolled state. Tis control efect can be more intuitively felt in Figure 18. Figure 19 shows the comparison of the vibration of solar arrays with and without control under the condition of introducing white noise interference. After the introduction of white noise, the control efect of the active control algorithm is similar to that before the introduction of white noise, as shown in Figure 15, which further verifes the efectiveness of the tuned PID algorithm. It can be seen from the experimental data that the free vibration decays negatively when there is no active vibration suppression, which matches the established mathematical model. In the three vibration cycles after PID control was introduced, the vibration was efectively suppressed and maintained in a relatively stable range. After the initial excitation is applied, interference is introduced, and the vibration state of the solar array changes. On this basis, by observing the vibration waveform of the solar array with or without control, it can be seen that
++ - PID (s)
+13.528 s2 + 0.241 s + 13.528
+13.528 s2 + 0.241 s + 13.528
+125
+125
++
++
+Figure 12: Block diagram of the Simulink parameter setting system.
+Structural Control and Health Monitoring 15
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+the same PID parameters still have a good vibration suppression efect on the solar array after interference has been introduced. Te result of the fast Fourier transform (hereinafter referred to as FFT) on the vibration of solar arrays with and without active control is shown in Figure 20. It can be seen from the fgure that when the frst-order natural frequency sinusoidal signal interferes, the vibration suppression at the resonance frequency is more obvious. Tis shows that the active vibration suppression based on MFCs gives the solar array a reaction force of the same frequency to suppress vibration. Terefore, the natural frequency of solar arrays is a necessary parameter for the establishment of mathematical
+models and experiments in the early stage, and it needs to be obtained through experiments and simulations. When the sinusoidal interferes with the input, the FFT waveform comparison with or without active control is shown in Figure 18. When white noise interferes with the input, the FFT waveform comparison with or without active control is shown in Figure 21. It can be observed from the fgures that in the case of diferent interference inputs, the efect of active control is similar, and the amplitude near the fundamental frequency can be signifcantly reduced. Te interference signal we provide in the experiment is the interference signal that is often encountered in nature. Under the existing experimental conditions, the M − 4312 −
+0 5 10 Time (s)
+15 20
+-30
+-20
+-10
+0
+10
+20
+30
+Displacement (mm)
+Model Experiment
+(a)
+0 10 20 Frequency (Hz)
+30 40 50
+-60
+-40
+-20
+0
+20
+40
+80
+60
+Displacement (mm)
+Model Experiment
+(b)
+Figure 13: Comparison of time domain results on the simulation and experimental vibration of the solar array. (a) Comparison of time domain results on the simulation and experimental vibration of the single-board solar array. (b) Comparison of time domain results on the simulation and experimental vibration of the double-board solar array.
+Ffq GrequencyM©SzT
+zPZ
+F
+f
+q
+z
+P
+Z
+(isplacementM©mmT
+ ́odel )xperiment
+(a)
+Ffq GrequencyM©SzT
+zPZ
+F
+Z
+fF
+fZ
+(isplacementM©mmT
+ ́odel )xperiment
+(b)
+Figure 14: Comparison of FFT on the simulation and experimental vibration of the solar array. (a) Comparison of FFT on the simulation and experimental vibration of the single-board solar array. (b) Comparison of FFT on the simulation and experimental vibration of the double-board solar array.
+16 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+0 5 10 time (s)
+15 20
+-30
+-20
+-10
+0
+10
+20
+30
+40
+Displacement (mm)
+Uncontrol Initial-PID Tuned-PID
+(a)
+0 5 10 15 20 25 35 time (s)
+30 40
+-60
+-40
+-20
+0
+20
+40
+80
+60
+Displacement (mm)
+Uncontrol Initial-PID Tuned-PID
+(b)
+Figure 15: Comparison of free vibration control of the solar array. (a) Comparison of vibration of the single-board solar array with initial and tuned PID control and without control. (b) Comparison of vibration of the double-board solar array with initial and tuned PID control and without control.
+VreateMinitial population
+OpfOdfOi parameterMdecoding
+OpfOdfOi parameterMencoding
+Utart
+8XVGMmodel
+GreeMvibrationMcontrolledMresponse
+ ́utation
+Vrossover
+UteadyIstateMamplitude UtabilizationMtime
+Utop
+OpfOdfOi parameterMdecoding
+Uelection
+es Xo
+ ́eetMstopping conditions7
+VhooseMtheMindividual withMtheMhighestMfitness
+ValculateMtheMfitnessMofMeach individualMinMtheMpopulation
+Figure 16: Genetic algorithm search PID control parameter fowchart.
+Structural Control and Health Monitoring 17
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+0 5 10 time (s)
+15 20
+-30
+-40
+-20
+-10
+0
+10
+20
+30
+40
+Displacement (mm)
+Uncontrol Control
+(a)
+0 5 10 15 20 25 35 time (s)
+30 40
+-60
+-40
+-20
+0
+20
+40
+80
+60
+Displacement (mm)
+Uncontrol Control
+(b)
+Figure 17: Comparison of vibration of the solar array with and without control under the condition of introducing sinusoidal interference. (a) Comparison of vibration of the single-board solar array with and without control under the condition of introducing sinusoidal interference. (b) Comparison of vibration of the double-board solar array with and without control under the condition of introducing sinusoidal interference.
+Ffq GrequencyM©SzT
+zPZ
+F
+f
+q
+z
+P
+Z
+T
+(isplacementM©mmT
+”ncontrol Vontrol
+(a)
+Ffq GrequencyM©SzT
+zPZ
+F
+Z
+fF
+fZ
+qF
+(isplacementM©mmT
+”ncontrol Vontrol
+(b)
+Figure 18: Comparison of FFT on the vibration of solar arrays with and without control under the condition of introducing sinusoidal interference. (a) Comparison of FFT on the vibration of the single-board solar array with and without control under the condition of introducing sinusoidal interference. (b) Comparison of FFT on the vibration of the double-board solar array with and without control under the condition of introducing sinusoidal interference.
+18 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+0 5 10 time (s)
+15 20
+-30
+-20
+-10
+0
+10
+20
+30
+40
+Displacement (mm)
+Uncontrol Control
+(a)
+0 5 10 15 20 25 35 time (s)
+30 40
+-60
+-40
+-20
+0
+20
+40
+80
+60
+Displacement (mm)
+Uncontrol Control
+(b)
+Figure 19: Comparison of vibration of the solar array with and without control under the condition of introducing white noise interference. (a) Comparison of vibration of the single-board solar array with and without control under the condition of introducing white noise interference. (b) Comparison of vibration of the double-board solar array with and without control under the condition of introducing white noise interference.
+Ffq GrequencyM©SzT
+zPZ
+F
+f
+q
+z
+P
+Z
+(isplacementM©mmT
+”ncontrol Vontrol
+(a)
+Ffq GrequencyM©SzT
+zPZ
+F
+Z
+fF
+fZ
+qF
+qZ
+(isplacementM©mmT
+”ncontrol Vontrol
+(b)
+Figure 20: Comparison of FFT on the vibration of solar arrays with and without control. (a) Comparison of FFT on the vibration of the single-board solar array with and without control. (b) Comparison of FFT on the vibration of the double-board solar array with and without control.
+Structural Control and Health Monitoring 19
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+P1 type MFC is used to output interference excitation. Te maximum output force provided by this MFC is 120 N, which is smaller than the maximum 340 N output force of the M − 5628 − P1 type MFC. Tis is the reason why the vibration amplitude has decreased after the introduction of interference.
+4. Conclusion
+In this paper, an MFC-based active vibration suppression system for solar arrays is designed. Te vibration suppression mechanism of MFC is analyzed, and the dynamic model of the solar array considering the infuence of MFC mass and stifness is derived by using the absolute nodal coordinate method. Te experimental and simulation results show a high degree of agreement, which verifes the accuracy of
+the theoretical modeling and numerical solution in this paper. Te vibration suppression stability time and vibration suppression amplitude of free vibration and forced vibration under sinusoidal and white noise interference signals are studied through experiments and simulations, and the vibration suppression efect of the PID controller and the feasibility of using MFC to suppress solar array vibration are verifed. Te system designed in this paper can provide a reliable platform for the design of active control algorithms, and play a fundamental role in the research of aerospace projects.
+Appendix
+Te expression for the virtual work performed by the elasticity of the plate element is as follows:
+δWfe � − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δεT
+0 Afε0dydx + 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δεT
+0 Bfκdydx
++1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δκTBfε0dydx − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δκTCfκdydx,
+(A.1)
+where
+Af � 􏽚
+(h/2)
+− (h/2)
+Ddz,
+Bf � 􏽚
+(h/2)
+− (h/2)
+zDdz,
+Cf � 􏽚
+(h/2)
+− (h/2)
+z2Ddz.
+(A.2)
+012 Frequency (Hz)
+345
+0
+1
+2
+3
+4
+Displacement (mm)
+Uncontrol Control
+(a)
+012 Frequency (Hz)
+345
+0
+5
+10
+15
+20
+25
+Displacement (mm)
+Uncontrol Control
+(b)
+Figure 21: Comparison of FFT on the vibration of solar arrays with and without control under the condition of introducing white noise interference. (a) Comparison of FFT on the vibration of the single-board solar array with and without control under the condition of introducing white noise interference. (b) Comparison of FFT on the vibration of the double-board solar array with and without control under the condition of introducing white noise interference.
+20 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+Qfe is the element generalized elastic force matrix, and its expression is
+Qfe � Qfe1 + Qfe2 + Qfe3 + Qfe4,
+Qfe1 � − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+HTAfε0dydx,
+Qfe2 � 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+HTBfκdydx,
+Qfe3 � 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+GTBfε0dydx,
+Qfe4 � − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+GTCfκdydx.
+(A.3)
+Te expression for the virtual work performed by the elastic force of the sensor element and the actuator element is as follows:
+δWse � − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δεT
+0 Asε0dydx + 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δεT
+0 Bsκdydx
++1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δκTBsε0dydx − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δκTCsκdydx,
+As � 􏽚
+− (h/2)
+− (h/2)− hs
+CEdz,
+Bs � 􏽚
+− (h/2)
+− (h/2)− hs
+zCEdz,
+Cs � 􏽚
+− (h/2)
+− (h/2)− hs
+z2CEdz,
+(A.4)
+δWae � − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δεT
+0 Aaε0dydx + 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δεT
+0 Baκdydx
++1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δκTBaε0dydx − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+δκTCaκdydx
++1
+2􏽚
+Va
+δεT
+0 eTu
+d dV − 1
+2􏽚
+Va
+zδκTeTu
+d dV,
+Aa � 􏽚
+(h/2)+ha
+h/2
+CEdz,
+Ba � 􏽚
+(h/2)+ha
+h/2
+zCEdz,
+Ca � 􏽚
+(h/2)+ha
+h/2
+z2CEdz,
+(A.5)
+Qae is the generalized elastic force matrix of the actuator element, and its expression is
+Structural Control and Health Monitoring 21
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+Qae � Qae1 + Qae2u, (A.6)
+Qae1 � − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+HTAaε0dydx + 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+HTBaκdydx
++1
+2􏽚
+ae
+0
+􏽚
+be
+0
+GTBaε0dydx − 1
+2􏽚
+ae
+0
+􏽚
+be
+0
+GTCaκdydx,
+Qae2 � 1
+2􏽚
+Va
+HT eT 1
+d dV − 1
+2􏽚
+Va
+zGT eT 1
+d dV.
+(A.7)
+Data Availability
+Te data that support the fndings of this study are available from the corresponding author upon request. Te data are not publicly available due to them containing information that could compromise research participants’ consent.
+Conflicts of Interest
+Te authors declare that they have no conficts of interest.
+Authors’ Contributions
+Luo Haitao organized and planned this study as well as designed the research ideas and experimental strategies. Li Huadong performed the theoretical modeling and designed the control strategy. Wu Xingyuan built the ground test platforms and designed the circuit. Liu Guangming performed the modal testing and active suppression test operations. Zhang Wei reviewed and revised the manuscript and polished the language.
+Acknowledgments
+Tis research was fnancially supported by the National Natural Science Foundation of China (51975567), the Central Government Guides Local Fund for Scientifc and Technological Development in Liaoning Province (2023JH6/ 100100008), the Basic Research Project of Shenyang Institute of Automation, CAS (2022JC2K04), the Independent Project of the State Key Laboratory of Robotics (2022-Z01), the Space Automation Technology Research Laboratory Development Fund, SIA (2023-D01), the Fundamental Research Project of SIA (2023JC2K02, and 2023JC1K05), and the Natural Science Fund of Liaoning Province (2022MS-032 and 2023-MS-031).
+References
+[1] K. Ma, “Adaptive nonlinear control of a clamped rectangular plate with PZT patches,” Journal of Sound and Vibration, vol. 264, no. 4, pp. 835–850, 2003. [2] J. Sinou and B. Chomette, “Active vibration control and stability analysis of a time-delay system subjected to frictioninduced vibration,” Journal of Sound and Vibration, vol. 500, 2021. [3] A. Kras and P. Gardonio, “Active vibration control unit with a fywheel inertial actuator,” Journal of Sound and Vibration, vol. 464, 2020.
+[4] T. Soni, A. Das, and J. Dutt, “Active vibration control of ship mounted fexible rotor-shaft-bearing system during seakeeping,” Journal of Sound and Vibration, vol. 467, 2020. [5] S. Dalela, P. Balaji, and D. Jena, “A review on application of mechanical metamaterials for vibration control,” Mechanics of Advanced Materials and Structures, vol. 29, no. 22, pp. 3237–3262, 2021. [6] H. Li, Z. Li, Z. Xiao et al., “Vibro-impact response of FRP sandwich plates with a foam core reinforced by chopped fber rods,” Composites Part B: Engineering, vol. 242, 2022.
+[7] A. Jz, A. Zh, B. Yl, and A. Ss, “Modal characteristics and manufacturing method of variable stifness facesheets of sandwich plates made by robotic fber placement,” Composite Structures, 2021.
+[8] J. R. Maly, S. M. Anandakrishnan, S. C. Pendleton, E. Shade, J. W. Sills Jr, and T. T. Hyde, “Flight hardware for the Hubble Space Telescope solar array damper,” SPIE Proceedings-Te International Society for Optical Engineering, vol. 3989, pp. 14–25, 2000. [9] J. Wang and D. Li, “Experiments study on attitude coupling control method for fexible spacecraft,” Acta Astronautica, vol. 147, pp. 393–402, 2018. [10] Y. Zhang, Y. Zang, M. Li, Y. Wang, and W. Li, “Active-passive integrated vibration control for control moment gyros and its application to satellites,” Journal of Sound and Vibration, vol. 394, pp. 1–14, 2017. [11] E. Talib, J. H. Shin, and M. K. Kwak, “Designing multi-input multi-output modal-space negative acceleration feedback control for vibration suppression of structures using active mass dampers,” Journal of Sound and Vibration, vol. 439, pp. 77–98, 2019. [12] S. Sarkar and A. Chakraborty, “Development of semi-active vibration control strategy for horizontal axis wind turbine tower using multiple magneto-rheological tuned liquid column dampers,” Journal of Sound and Vibration, vol. 457, pp. 15–36, 2019. [13] P. Gardonio, E. Turco, A. Kras, L. D. Bo, and D. Casagrande, “Semi-active vibration control unit tuned to maximise electric power dissipation,” Journal of Sound and Vibration, vol. 499, 2021. [14] X. Xie, M. Ren, H. Zheng, and Z. Zhang, “Active vibration control of a time-varying shafting system using an adaptive algorithm with online auxiliary flter estimation,” Journal of Sound and Vibration, vol. 513, 2021.
+[15] H. Li, H. Lv, J. Gu et al., “Nonlinear vibration characteristics of fbre reinforced composite cylindrical shells in thermal environment,” Mechanical Systems and Signal Processing, vol. 156, 2021. [16] Z. Zhao, Q. Chen, R. Zhang, X. Ren, and X. Hu, “Variable friction-tuned viscous mass damper and power-fow-based control,” Structural Control and Health Monitoring, vol. 29, no. 3, 2022.
+22 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+[17] Y. Wang and W. Zhang, “On the thermal buckling and postbuckling responses of temperature-dependent graphene platelets reinforced porous nanocomposite beams,” Composite Structures, vol. 296, 2022.
+[18] J. J. Mao and W. Zhang, “Buckling and post-buckling analyses of functionally graded graphene reinforced piezoelectric plate subjected to electric potential and axial forces,” Composite Structures, vol. 216, pp. 392–405, 2019. [19] A. Wang, H. Chen, Y. Hao, and W. Zhang, “Vibration and bending behavior of functionally graded nanocomposite doubly-curved shallow shells reinforced by graphene nanoplatelets,” Results in Physics, vol. 9, pp. 550–559, 2018. [20] C. Lim, “From photonic crystals to seismic metamaterials: a review via phononic crystals and acoustic metamaterials,” Archives of Computational Methods in Engineering, vol. 62, 2021. [21] C. Zhang and H. Wang, “Swing vibration control of suspended structures using the Active Rotary Inertia Driver system: theoretical modeling and experimental verifcation,” Structural Control and Health Monitoring, vol. 27, no. 6, 2020. [22] A. Javanmardi, Z. Ibrahim, K. Ghaedi, H. Benisi Ghadim, and M. U. Hanif, “State-of-the-art review of metallic dampers: testing, development and implementation,” Archives of Computational Methods in Engineering, vol. 27, no. 2, pp. 455–478, 2020. [23] P. Vishal, D. Kaliperumal, and R. Padhi, “Active vibration suppression of nonlinear cantilever beam using shape memory alloy actuators,” IFAC-PapersOnLine, vol. 51, no. 1, pp. 130–135, 2018. [24] Y. Shen and A. Homaifar, “Vibration control of fexible structures with PZT sensors and actuators,” Journal of Vibration and Control, vol. 7, no. 3, pp. 417–451, 2001. [25] M. K. Kwak and S. Heo, “Active vibration control of smart grid structure by multiinput and multioutput positive position feedback controller,” Journal of Sound and Vibration, vol. 304, no. 1-2, pp. 230–245, 2007. [26] E. Omidi, S. N. Mahmoodi, and W. S. Shepard, “Multi positive feedback control method for active vibration suppression in fexible structures,” Mechatronics, vol. 33, pp. 23–33, 2016. [27] S. Sharma, A. Kumar, R. Kumar, M. Talha, and R. Vaish, “Active vibration control of smart structure using poling tuned piezoelectric material,” Journal of Intelligent Material Systems and Structures, vol. 16, 2020.
+[28] B. Prakash, M. Amir, M. Y. Yasin, and A. H. Khan, “Active vibration control of smart laminated beams using PFRC patches as sensors and actuators,” Materials Today: Proceedings, vol. 21, pp. 1355–1360, 2020. [29] X. Cao, C. Yue, and M. Liu, “Flexible satellite attitude maneuver via constrained torque distribution and active vibration suppression,” Aerospace Science and Technology, vol. 67, pp. 387–397, 2017. [30] Z. Qiu, J. D Han, X. M Zhang, Y. C Wang, and Z. W Wu, “Active vibration control of a fexible beam using a noncollocated acceleration sensor and piezoelectric patch actuator,” Journal of Sound and Vibration, vol. 326, no. 3-5, pp. 438–455, 2009. [31] Q. Yuan, Y. Liu, and N. Qi, “Active vibration suppression for maneuvering spacecraft with high fexible appendages,” Acta Astronautica, vol. 139, pp. 512–520, 2017. [32] Y. Jiang, W. Zhang, Y. Zhang, and S. Lu, “Nonlinear vibrations of four-degrees of freedom for piezoelectric functionally graded graphene-reinforced laminated composite cantilever rectangular plate with PPF control strategy,” Tin-Walled Structures, vol. 188, 2023.
+[33] W. K. Wilkie, R. G. Bryant, and J. W. High, “Low-cost piezocomposite actuator for structural control applications,” SPIE Proceedings, pp. 323–334, 2000. [34] A. Kovalovs, E. Barkanov, and S. Gluhihs, Active Control of Structures Using Macro-Fiber Composite (MFC), IOP Publishing, Bristol, UK, 2007. [35] K. Steiger and P. Mokry ́, “Finite element analysis of the macro fber composite actuator: macroscopic elastic and piezoelectric properties and active control thereof by means of negative capacitance shunt circuit,” Smart Materials and Structures, vol. 24, no. 2, 2015. [36] L. Leniowska and D. Mazan, “MFC sensors and actuators in active vibration control of the circular plate,” Archives of Acoustics, vol. 40, no. 2, pp. 257–265, 2015. [37] C. Zhang, X. Zhang, M. Xu, and Y. Luo, “Active control of honeycomb sandwich plate using MFC piezoelectric actuators,” International Journal of Applied Electromagnetics and Mechanics, vol. 45, no. 1-4, pp. 83–91, 2014. [38] H. Zhang, W. Sun, H. Luo, and R. Zhang, “Active vibration control of composite laminates with MFC based on PID-LQR hybrid controller,” Mechanics of Advanced Materials and Structures, pp. 1–18, 2023. [39] C. Wu, M. Xu, T. Wu, and G. Ma, “Active vibration control of the panel refection antenna by MFC sensors and actuators,” International Journal of Applied Electromagnetics and Mechanics, vol. 52, no. 3-4, pp. 1267–1275, 2016. [40] C. Li, L. Shen, J. Shao, and J. Fang, “Simulation and experiment of active vibration control based on fexible piezoelectric MFC composed of PZT and PI layer,” Polymers, vol. 15, no. 8, p. 1819, 2023. [41] Q. Lu, P. Wang, and C. Liu, “An analytical and experimental study on adaptive active vibration control of sandwich beam,” International Journal of Mechanical Sciences, vol. 232, 2022. [42] A. A. Shabana, “An absolute nodal coordinate formulation for the large rotation and deformation analysis of fexible bodies,” Technical Report, Department of Mechanical Engineering, University of Illinois at Chicago, Chicago, IL, USA, 1996. [43] A. A. Shabana, “Defnition of the slopes and the fnite element absolute nodal coordinate formulation,” Multibody System Dynamics, vol. 1, no. 3, pp. 339–348, 1997. [44] J. Escalona, H. A. Hussien, and A. Shabana, “Application of the absolute nodal co-ordinate formulation to multibody system dynamics,” Journal of Sound and Vibration, vol. 214, no. 5, pp. 833–851, 1998. [45] A. Recuero and D. Negrut, “Chrono support for ANCF fnite elements: formulation and validation aspects,” Technical report, 2016. [46] G. Gilardi, B. Buckham, and E. Park, “Finite element modeling of a slewing non-linear fexible beam for active vibration control with arrays of sensors and actuators,” Journal of Intelligent Material Systems and Structures, vol. 20, no. 16, pp. 1941–1958, 2009. [47] J. Whitney and A. Leissa, “Analysis of heterogeneous anisotropic plates,” Journal of Applied Mechanics, vol. 36, no. 2, pp. 261–266, 1969. [48] O. Dmitrochenko and D. Y. Pogorelov, “Generalization of plate fnite elements for absolute nodal coordinate formulation,” Multibody System Dynamics, vol. 10, no. 1, pp. 17–43, 2003. [49] J. Zhang, J. Tu, F. Lai, W. Luo, and C. Zhu, Study on MacroFiber Composite Coupled-Plate Structures, IOP Publishing, Bristol. UK, 2017. [50] J. Zhang, J. Tu, Z. Li, K. Gao, and H. Xie, “Modeling on actuation behavior of Macro-Fiber Composite laminated
+Structural Control and Health Monitoring 23
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+
+structures based on sinusoidal shear deformation theory,” Applied Sciences, vol. 9, no. 14, p. 2893, 2019. [51] M. Dunn and M. Taya, “Micromechanics predictions of the efective electroelastic moduli of piezoelectric composites,” International Journal of Solids and Structures, vol. 30, no. 2, pp. 161–175, 1993. [52] A. Pandey and A. Arockiarajan, “Actuation performance of macro-fber composite (MFC): modeling and experimental studies,” Sensors and Actuators A: Physical, vol. 248, pp. 114–129, 2016. [53] K. Ramesh Kumar and S. Narayanan, “Active vibration control of beams with optimal placement of piezoelectric sensor/actuator pairs,” Smart Materials and Structures, vol. 17, no. 5, 2008. [54] I. Bruant, L. Gallimard, and S. Nikoukar, “Optimal piezoelectric actuator and sensor location for active vibration control, using genetic algorithm,” Journal of Sound and Vibration, vol. 329, no. 10, pp. 1615–1635, 2010. [55] Z. Qiu, X. Zhang, H. Wu, and H. Zhang, “Optimal placement and active vibration control for piezoelectric smart fexible cantilever plate,” Journal of Sound and Vibration, vol. 301, no. 3-5, pp. 521–543, 2007. [56] X. He, T. Ng, S. Sivashanker, and K. Liew, “Active control of FGM plates with integrated piezoelectric sensors and actuators,” International Journal of Solids and Structures, vol. 38, no. 9, pp. 1641–1655, 2001. [57] S. M. R. Rasid, T. Mizuno, Y. Ishino, M. Takasaki, M. Hara, and D. Yamaguchi, “Design and control of active vibration isolation system with an active dynamic vibration absorber operating as accelerometer,” Journal of Sound and Vibration, vol. 438, pp. 175–190, 2019. [58] A. H. Rabiee and M. Esmaeili, “Simultaneous vortex-and wake-induced vibration suppression of tandem-arranged circular cylinders using active feedback control system,” Journal of Sound and Vibration, vol. 469, 2020.
+[59] M. Ramı ́rez-Neria, J. Morales-Valdez, and W. Yu, “Active vibration control of building structure using active disturbance rejection control,” Journal of Vibration and Control, vol. 28, no. 17-18, pp. 2171–2186, 2021.
+24 Structural Control and Health Monitoring
+schm, 2024, 1, Downloaded from https://onlinelibrary.wiley.com/doi/10.1155/2024/8826434 by CochraneChina, Wiley Online Library on [03/09/2025]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License

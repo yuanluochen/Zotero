@@ -1,0 +1,331 @@
+27 4
+2012 8 ChineseJournalofLiquidCrystalsandDisplays
+Vol.27,No.4
+Aug.,2012
+:1007-2780(2012)04-0552-05
+Hough
+1,2, 1* , 1
+(1. , 130033,E-mail:deakain@163.com;
+2. , 100049)
+:, ,
+、。 ,
+。
+, ,Matlab ,
+,,, 。
+: ;;;
+:TP391.4 :A DOI:10.3788/YJYXS20122704.0552
+PerspectiveImageRectificationBasedonImprovedHough
+TransformationandPerspectiveTransformation
+DAIQin1,2,WANG Yan-jie1* ,HAN Guang-liang1
+(1.ChangchunInstituteofOptics,FineMechanicsandPhysics,ChineseAcademyofSciences,
+Changchun 130033,China,E-mail:deakain@163.com;
+2.GraduateUniversityofChineseAcademyofSciences,Beijing 100049,China)
+Abstract:Whentheimagescollectedfrom camerahaveperspectivedistortion,itcanaffect
+thefollowingworksuchasfeatureextractionandobjectrecognitionduetotheinfluenceof
+perspectiveprojection.Whenrectifyingthesedistortedimages,perspectivetransformation
+canchangetherelativepositionofinnerpoints,whileaffinetransformationcannot.Thisar
+ticlewillimprovetheHoughtransformationtofindthelinesthatholdthefourpointswhich
+perspectivetransformationneeds,andthenusetheperspectivetransformationtorectifythe
+distortionbased ontheimaging principleofcameras.Emulationexperimentresultsfrom
+Matlabrevealthatthealgorithmcaneffectivelyrectifythedistortedimagesandachieveour
+expectation.Thisalgorithmiseasy,feasibleandrobust,andcanbeappliedto manyfields
+includingobjectrecognition.
+Keywords:imageprocess;imagerectification;Houghtransformation;perspectivetransformation
+:2011-12-11; :2012-03-15
+: (No.61172111)
+: (1989-), , , , 。
+* ,E-mail:wangyj@ciomp.ac.an
+1
+(
+)、
+,
+,,
+
+
+4 , : Hough 553
+。 Radon [1] Hough
+[2] ,
+、
+[3-4]。 ,
+,
+,。
+Hough
+[5-6],
+,
+4, 4,
+。, 。
+2
+2.1
+,,
+,1 。
+视线
+视点 S
+画面 P
+A′
+B′
+C
+B
+A
+C
+1
+Fig.1 Perspectiveprojection
+,,
+。
+2.2 、 、
+,
+,,
+,、
+[7]。
+,,
+。
+2.3
+,
+,,
+;,
+, 。,
+,,
+,
+2。
+A
+A′
+yx C D
+PB
+B′
+P′
+C′
+D′
+y′
+I′
+I
+x′
+O
+2
+Fig.2 Perspectivetransformationof2Dimage
+P(c,y) O ,
+P′(x,y),
+。
+, [8-9]:
+u=ax+by+c
+nx+ly+1, ν=dx+ey+f
+mx+ly+1 (1)
+(x,y) ,(u,v)
+,a,b,c,d,e,f,m,l
+。
+2.4
+,
+,;
+,,
+,,
+。,
+。
+,
+,
+,
+。
+,
+(
+), (u,v) ,
+,
+。
+
+
+554 27
+3 Hough
+,
+,,
+。
+,
+。
+Hough [10-11]
+,
+。
+,
+。,
+,。
+,
+。
+,
+,,
+, Hough
+( ), ,
+( ),
+1,
+,
+,
+。
+Hough ,
+,
+。,
+, ( 1,
+), ;
+Hough
+,,
+,
+,。
+4
+4.1
+,4
+, Hough 4 ,
+44
+,
+,
+。 (1) :
+[v u]= x y 1 0 0 0 -ux -uy
+0 0 0 x y 1 -vx -v
+[]
+y
+a
+b
+c
+d
+e
+f
+m
+熿
+燀
+燄
+燅
+l
+(2)
+8,
+。
+(x1,y1)(x2,y2)(x3,y3)(x4,y4);
+(u1,v1)(u2,v2)(u3,v3)(u4,v4);
+
+:
+u1
+v1
+u2
+v2
+u3
+v3
+u4
+v
+熿
+燀
+燄
+4燅
+=
+x1 y1 1 0 0 0 -u1x1 -u1y1
+0 0 0 x1 y1 1 -v1x1 -v1y1
+x2 y2 1 0 0 0 -u2x2 -u2y2
+0 0 0 x2 y2 1 -v2x2 -v2y2
+x3 y3 1 0 0 0 -u3x3 -u3y3
+0 0 0 x3 y3 1 -v3x3 -v3y3
+x4 y4 1 0 0 0 -u4x4 -u4y4
+0 0 0 x4 y4 1 -v4x4 -v4y
+熿
+燀
+燄
+4燅
+×
+a
+b
+c
+d
+e
+f
+m
+熿
+燀
+燄
+燅
+l
+(3
+
+)
+:
+UV = A×M (4)
+:
+M = A-1 ×UV (5)
+
+
+4 , : Hough 555
+。
+,。
+4.2
+:
+1: 4
+;
+2: 4 ;
+3: ,
+;
+4: ,
+,。
+5
+,
+。
+1: 3 Lena
+(a)
+(b)
+(c)
+3 Lena .(a) Lena ;(b)
+;(c) .
+Fig.3 RectificationofperspectiveLenaimage.(a)Origi
+nalperspectiveLenaimage;(b)Directlyobtained
+rectifiedimage;(c)Amendedrectifiedimage.
+, , Hough
+4 ,4
+4,
+Lena 。
+,,
+,
+,
+(
+, , ),
+,,
+,、 3
+,
+,
+。
+2: 4 ,
+,,
+,
+, Hough
+,,
+,4 ,
+4。
+(a)
+(b)
+4 .(a) ;(b)
+.
+Fig.4 Rectificationofperspectiveimageofsquare.(a)
+Originalperspectiveimageofsquare;(b)Recti
+fiedimageusingouralgorithm.
+
+
+556 27
+,
+,。
+6
+,
+。
+Hough
+,,
+。
+,
+、 、 10
+, 30 ,
+98% 。
+、
+。
+,
+Hough
+,,
+Hough
+。 Hough ,
+Hough ,
+。
+:
+[1] , , . Radon [J]. ,2008,44(3):245
+248.
+[2] , , . Hough [J]. ,2007,27(7):1813-1816.
+[3] . ( ) [M]. 2 . : ,2006:63-65.
+[4] , , . [J]. ( ),2011,24(2):42-45.
+[5] , , , . Hough [J]. ,2010,25(6):901-908.
+[6] , , , . Hough [J]. ,2003,11(6):632-636.
+[7] . [J]. ,2005,17(4):734-739.
+[8]GuanLing.FrontMatterMultimediaImageandVideoProcessing [M].BocaRaton;CRCPressLLC,2001.
+[9]TekalpA M.DigitalVideoProcessing [M]. 2 . : ,1998,165-166.
+[10] . [J]. ,2007,11(1):206-208.
+[11] , . [J]. ,2001,24(10):1104-1109.

@@ -1,22 +1,22 @@
 {
-	"translatorID": "33553736-4ea9-4b1a-b1e1-d43b2a918156",
-	"label": "Superlib",
-	"creator": "018<lyb018@gmail.com>",
-	"target": "^https?://(book|jour)\\.ucdrs\\.superlib\\.net/(search|views/specific)",
+	"translatorID": "44c46760-3a27-4145-a623-9e42b733fbe8",
+	"label": "SuperLib",
+	"creator": "Xingzhong Lin",
+	"target": "https?://.*?\\.ucdrs\\.superlib\\.net",
 	"minVersion": "3.0",
 	"maxVersion": "",
 	"priority": 100,
 	"inRepository": true,
 	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-08-18 19:44:00"
+	"lastUpdated": "2024-04-01 08:47:02"
 }
 
 /*
 	***** BEGIN LICENSE BLOCK *****
 
-	Copyright © 2020 018<lyb018@gmail.com>
-
+	Copyright © 2020 Xingzhong Lin, jiaojiaodubai
+	
 	This file is part of Zotero.
 
 	Zotero is free software: you can redistribute it and/or modify
@@ -35,440 +35,446 @@
 	***** END LICENSE BLOCK *****
 */
 
-function trim(content) {
-	return content.replace(/^[\xA0\s]+/gm, '')
-		.replace(/[\xA0\s]+$/gm, '')
-		.replace(/\n+/g, '\n')
-		.replace(/:\n+/g, ': ')
-		.replace(/]\n/g, ']')
-		.replace(/】\n/g, '】')
-		.replace(/\n\/\n/g, '/');
-}
-
-// https://aurimasv.github.io/z2csl/typeMap.xml#map-book
-// https://aurimasv.github.io/z2csl/typeMap.xml#map-conferencePaper
-// https://aurimasv.github.io/z2csl/typeMap.xml#map-thesis
-// https://aurimasv.github.io/z2csl/typeMap.xml#map-journalArticle
-// https://aurimasv.github.io/z2csl/typeMap.xml#map-patent
-var TYPE_MAP = {
-	图书: 'book',
-	会议论文: 'conferencePaper',
-	学位论文: 'thesis',
-	期刊: 'journalArticle',
-	专利: 'patent'
+const urlMap = {
+	bookDetail: 'book',
+	JourDetail: 'journalArticle',
+	NPDetail: 'newspaperArticle',
+	thesisDetail: 'thesis',
+	CPDetail: 'conferencePaper',
+	patentDetail: 'patent',
+	StdDetail: 'standard'
 };
 
-function doPerson(item, data) {
-	// （日）本田晃一著；朱运程译 translator author
-	if (!data) return;
-	const persons = data.split(/；|;/g);
-	for (var person of persons) {
-		if (person.endsWith('著')) {
-			item.creators.push({
-				lastName: person.trim().replace(/著$/g, ''),
-				creatorType: 'author',
-				fieldMode: 1
-			});
-		}
-		else if (person.endsWith('译')) {
-			item.creators.push({
-				lastName: person.trim().replace(/译$/g, ''),
-				creatorType: 'translator',
-				fieldMode: 1
-			});
-		}
-		else {
-			item.creators.push({
-				lastName: person,
-				creatorType: 'author',
-				fieldMode: 1
-			});
-		}
-	}
-}
-
-function doInventor(item, data) {
-	if (!data || data.length <= 0) return;
-	const persons = data.split('，');
-	for (var person of persons) {
-		item.creators.push({
-			lastName: person,
-			creatorType: 'inventor',
-			fieldMode: 1
-		});
-	}
-}
-
-function doTag(item, data) {
-	if (!data || data.length <= 0) return;
-	const tags = data.split('；');
-	for (var tag of tags) {
-		item.tags.push(tag.trim());
-	}
-}
-
-function sourceType(doc) {
-	var type = doc.querySelector('.on span').textContent;
-	return type;
-}
-
-function detectType(doc) {
-	return TYPE_MAP[sourceType(doc)];
-}
-
 function detectWeb(doc, url) {
-	if (url.includes('/search')) {
-		return getSearchResults(doc, true) ? 'multiple' : false;
+	let type = Object.keys(urlMap).find(key => new RegExp(`${key}\\.`, 'i').test(url));
+	if (type) {
+		return urlMap[type];
 	}
-	else {
-		var dType = detectType(doc, url);
-		if (dType) {
-			return dType;
-		}
+	else if (getSearchResults(doc, true)) {
+		return "multiple";
 	}
-	
 	return false;
 }
 
-function getSearchResults(doc, checkOnly, itemInfo) {
+function getSearchResults(doc, checkOnly) {
 	var items = {};
 	var found = false;
-	var rows = doc.querySelectorAll('.book1');
+	var rows = doc.querySelectorAll('[name=formid] > table > tbody > tr > td:last-child, [name=formid] > [class^="book"]');
 	for (let row of rows) {
-		let a = row.querySelector('td > table .px14');
-		if (!a) {
-			a = row.querySelector('a');
-		}
-		if (!a) {
-			continue;
-		}
-
+		let header = row.querySelector('table a,a');
+		let href = header.href;
+		let title = `${ZU.trimInternal(header.textContent)}_${ZU.trimInternal(text(row, 'td > span, #m_fl'))}`;
+		if (!href || !title) continue;
 		if (checkOnly) return true;
-		
-		let url = a.href;
-
-		// Z.debug(url);
-		let title = ZU.trimInternal(a.textContent);
-		
 		found = true;
-		if (!found['']) {
-			items[''] = '【提醒：存在失败的可能，请隔几个小时后试试，或单个抓取。】';
-		}
-		
-		if (itemInfo) {
-			var download = row.querySelector('.get a');
-			if (download && download.textContent == 'PDF下载') {
-				itemInfo[url] = {
-					pdfurl: download.href
-				};
-			}
-		}
-		if (title.startsWith('《') && title.endsWith('》')) {
-			title = title.replace(/《|》/g, '');
-		}
-		
-		items[url] = title;
+		items[href] = title;
 	}
 	return found ? items : false;
 }
 
-function doWeb(doc, url) {
-	if (detectWeb(doc, url) == "multiple") {
-		var itemInfo = {};
-		Zotero.selectItems(getSearchResults(doc, false, itemInfo), function (items) {
-			if (items) {
-				if (items['']) {
-					delete items[''];
-				}
-				scrapeItem(Object.keys(items), itemInfo);
-			}
-		});
-	}
-	else {
-		scrape(doc, url);
-	}
-}
-
-function scrapeItem(items, itemInfo) {
-	ZU.processDocuments(items, function (doc, url) {
-		scrape(doc, url, itemInfo[url] ? itemInfo[url].pdfurl : null);
-	});
-}
-
-function scrape(doc, url, pdfurl) {
-	if (!url || url.length <= 0) {
-		return;
-	}
-	
-	var itemType = detectType(doc);
-	var item = new Zotero.Item(itemType);
-
-	item.url = url;
-	switch (sourceType(doc)) {
-		case '图书':
-			item.title = text(doc, '.tutilte');
-			var infos = text(doc, '.tubox dl');
-			infos = trim(infos);
-			for (var section0 of infos.split('\n')) {
-				if (!section0.trim()) continue;
-		
-				let index = section0.indexOf('】');
-				if (index <= -1) continue;
-		
-				let key = section0.substr(0, index + 1).trim();
-				let value = section0.substr(index + 1).trim();
-				// Z.debug(key + ':' + value);
-				switch (key) {
-					case "【作　者】":
-						doPerson(item, value);
-						break;
-					case "【出版项】":
-						var vals = Object.values(value.split(/：|,/g));
-						item.publisher = vals[1];
-						item.date = vals[2];
-						break;
-					case "【ISBN号】":
-						item.ISBN = value;
-						break;
-					case "【形态项】":
-						item.numPages = value;
-						break;
-					case "【中图法分类号】":
-						item.archiveLocation = value.replace(/\(.*\)/, '');
-						break;
-						
-					default:
-						break;
-				}
-			}
-		
-			// 摘要
-			item.abstractNote = text(doc, '.tu_content').replace(/内容提要:\n*/g, '');
-			break;
-		case '期刊':
-			item.title = ZU.trimInternal(text(doc, 'h1.title'));
-			infos = doc.querySelectorAll('#m_top li');
-			for (var section1 of infos) {
-				let content = ZU.trimInternal(section1.textContent);
-				if (!content || content.length <= 0) continue;
-		
-				let index = content.indexOf('】');
-				if (index <= -1) continue;
-		
-				content = trim(content);
-				let key = content.substr(0, index + 1).trim();
-				let value = content.substr(index + 1).trim();
-				switch (key) {
-					case "【作 者】":
-						doPerson(item, value);
-						break;
-					case "【刊 名】":
-						item.publicationTitle = value;
-						break;
-					case "【期 号】":
-						item.issue = value;
-						break;
-					case "【出版日期】":
-						item.date = value;
-						break;
-					case "【摘 要】":
-						item.abstractNote = value;
-						break;
-					case "【关键词】":
-						doTag(item, value);
-						break;
-					case "【影响因子】":
-						item.extra = '影响因子: ' + value;
-						break;
-					default:
-						break;
-				}
-			}
-			break;
-		case '学位论文':
-			item.title = ZU.trimInternal(text(doc, 'h1.title'));
-			infos = doc.querySelectorAll('#m_top li');
-			for (var section5 of infos) {
-				let content = ZU.trimInternal(section5.textContent);
-				if (!content || content.length <= 0) continue;
-		
-				let index = content.indexOf('】');
-				if (index <= -1) continue;
-		
-				content = trim(content);
-				let key = content.substr(0, index + 1).trim();
-				let value = content.substr(index + 1).trim();
-				switch (key) {
-					case "【作 者】":
-						doPerson(item, value);
-						break;
-					case "【学位授予单位】":
-						item.university = value;
-						break;
-					case "【导师姓名】":
-						item.creators.push({
-							lastName: value,
-							creatorType: 'contributor',
-							fieldMode: 1
-						});
-						break;
-					case "【学位年度】":
-						item.date = value;
-						break;
-					case "【摘 要】":
-						item.abstractNote = value.replace(/隐藏更多/g, '');
-						break;
-					case "【关键词】":
-						doTag(item, value);
-						break;
-					case "【学位名称】":
-						item.type = value;
-						break;
-					default:
-						break;
-				}
-			}
-			break;
-		case '会议论文':
-			item.title = ZU.trimInternal(text(doc, 'h1.title'));
-			infos = doc.querySelectorAll('#m_top li');
-			for (var section3 of infos) {
-				let content = ZU.trimInternal(section3.textContent);
-				if (!content || content.length <= 0) continue;
-		
-				let index = content.indexOf('】');
-				if (index <= -1) continue;
-		
-				content = trim(content);
-				let key = content.substr(0, index + 1).trim();
-				let value = content.substr(index + 1).trim();
-				switch (key) {
-					case "【作 者】":
-						doPerson(item, value);
-						break;
-					case "【会议名称】":
-						item.conferenceName = value;
-						break;
-					case "【会议录名称】":
-						item.series = value;
-						break;
-					case "【日 期】":
-						item.date = value;
-						break;
-					case "【摘 要】":
-						item.abstractNote = value.replace(/隐藏更多/g, '');
-						break;
-					case "【关键词】":
-						doTag(item, value);
-						break;
-					case "【作者联系方式】":
-						item.place = value;
-						break;
-					default:
-						break;
-				}
-			}
-			break;
-		case '专利':
-			item.title = ZU.trimInternal(text(doc, 'h1.title'));
-			infos = doc.querySelectorAll('.content li');
-			for (var section4 of infos) {
-				let content = ZU.trimInternal(section4.textContent);
-				if (!content || content.length <= 0) continue;
-		
-				let index = content.indexOf('】');
-				if (index <= -1) continue;
-		
-				content = trim(content);
-				let key = content.substr(0, index + 1).trim();
-				let value = content.substr(index + 1).trim();
-				switch (key) {
-					case "【申请号】":
-						item.applicationNumber = value;
-						break;
-					case "【申请人】":
-						doInventor(item, value);
-						break;
-					case "【发明人】":
-						doInventor(item, value);
-						break;
-					case "【申请日期】":
-						item.filingDate = value;
-						break;
-					case "【地 址】":
-						item.place = value;
-						break;
-					case "【专利类型】":
-						item.extra = '专利类型: ' + value;
-						break;
-					case "【IPC号】":
-						item.extra += '; IPC号: ' + value;
-						break;
-					case "【摘 要】":
-						item.abstractNote = value;
-						break;
-					default:
-						break;
-				}
-			}
-			break;
-	}
-	
-	if (item.title.startsWith('《') && item.title.endsWith('》')) {
-		item.title = item.title.replace(/《|》/g, '');
-	}
-	
-	// 如果抓取失败，请配合油猴脚本使用：https://greasyfork.org/zh-CN/scripts/408790
-	if (pdfurl) {
-		item.attachments.push({
-			url: pdfurl,
-			title: 'Full Text PDF',
-			mimeType: 'application/pdf'
-		});
-	}
-	else {
-		var download = doc.querySelector('.link a');
-		if (download && download.textContent == 'PDF下载') {
-			item.attachments.push({
-				url: download.href,
-				title: 'Full Text PDF',
-				mimeType: 'application/pdf'
-			});
+async function doWeb(doc, url) {
+	if (detectWeb(doc, url) == 'multiple') {
+		let items = await Zotero.selectItems(getSearchResults(doc, false));
+		if (!items) return;
+		for (let url of Object.keys(items)) {
+			// 依赖浏览器环境
+			await scrape(await requestDocument(url));
 		}
 	}
-	
-	item.complete();
+	else {
+		await scrape(doc, url);
+	}
+}
+
+async function scrape(doc, url = doc.location.href) {
+	Z.debug(doc.body.innerText);
+	const labels = new Labels(doc, '.content > ul:first-child > li, .tubox dd');
+	Z.debug(labels.data.map(arr => [arr[0], ZU.trimInternal(arr[1].textContent)]));
+	let extra = new Extra();
+	var newItem = new Zotero.Item(detectWeb(doc, url));
+	newItem.extra = '';
+	newItem.title = text(doc, 'h1, .tutilte');
+	// #zymore见于期刊
+	// .tu_content 见于图书
+	// #more 见于学位论文
+	// div[id^="content"]见于专利
+	newItem.abstractNote = innerText(doc, '#zymore, .tu_content, #more, div[id^="content"]').replace(/^【摘 要】/, '') || labels.get('简介');
+	switch (newItem.itemType) {
+		case 'book': {
+			let pubInfo = labels.get('出版项');
+			newItem.series = labels.get('丛书名');
+			// newItem.seriesNumber = 系列编号;
+			// newItem.volume = 卷次;
+			// newItem.numberOfVolumes = 总卷数;
+			// newItem.edition = 版本;
+			newItem.place = tryMatch(pubInfo, /(.+)：/, 1);
+			newItem.publisher = tryMatch(pubInfo, /：\s*(.+)，\s*/);
+			newItem.date = ZU.strToISO(tryMatch(pubInfo, /[\d.]*$/));
+			newItem.numPages = labels.get('形态项');
+			newItem.ISBN = labels.get('ISBN号');
+			extra.set('CLC', labels.get('中图分类法'));
+			extra.set('price', labels.get('定价'));
+			let creators = [];
+			labels.get('作者').replace(/(\w)，(\w)/g, '$1, $2')
+				.split('；')
+				.forEach((group) => {
+					let creatorType = /译$/.test(group)
+						? 'translator'
+						: 'author';
+					group.split('，').forEach((creator) => {
+						Z.debug(creator);
+						creator = creator.replace(/[等翻译主副参编著作]*$/, '');
+						let country = tryMatch(creator, /^（(.+?)）/, 1);
+						Z.debug(country);
+						creator = creator.replace(/^（.*?）/, '');
+						let original = tryMatch(creator, /（(.+?)）$/, 1);
+						creator = creator.replace(/（.*?）$/, '');
+						Z.debug(original);
+						Z.debug(creator);
+						creator = cleanAuthor(creator, creatorType);
+						creator.country = country;
+						creator.original = original;
+						creators.push(creator);
+					});
+				});
+			if (creators.some(creator => creator.country || creator.original)) {
+				extra.set('creatorsExt', JSON.stringify(creators));
+			}
+			creators.forEach((creator) => {
+				delete creator.country;
+				extra.push('origianl-author', creator.original, true);
+				delete creator.original;
+				newItem.creators.push(creator);
+			});
+			break;
+		}
+		case 'journalArticle':
+			newItem.publicationTitle = labels.get('刊名');
+			// newItem.volume = 卷次;
+			newItem.issue = tryMatch(labels.get('期号'), /0*([1-9]\d*)/, 1);
+			// newItem.pages = 页码;
+			newItem.date = labels.get('出版日期');
+			extra.set('original-title', labels.get('外文题名'), true);
+			extra.set('fund', labels.get('基金项目'));
+			extra.set('if', labels.get('影响因子'));
+			labels.get('作者', true).querySelectorAll('a').forEach(element => newItem.creators.push(cleanAuthor(element.textContent, 'author')));
+			labels.get('关键词', true).querySelectorAll('a').forEach(element => newItem.tags.push(element.textContent));
+			break;
+		case 'newspaperArticle':
+			newItem.publicationTitle = labels.get('来源');
+			newItem.date = ZU.strToISO(labels.get('日期'));
+			newItem.paegs = tryMatch(labels.get('版次'), /0*([1-9]\d*)/, 1);
+			labels.get('作者', true).querySelectorAll('a').forEach(element => newItem.creators.push(cleanAuthor(element.textContent, 'author')));
+			// 报纸语言皆为中文，使用空格分割不会造成意外
+			labels.get('关键词').split(' ').forEach(tag => newItem.tags.push(tag));
+			break;
+		case 'thesis':
+			newItem.thesisType = `${labels.get('学位名称')}学位论文`;
+			newItem.university = labels.get('学位授予单位');
+			newItem.date = labels.get('学位年度');
+			newItem.creators.push(cleanAuthor(labels.get('作者'), 'author'));
+			labels.get('导师').split('，').forEach(creator => newItem.creators.push(cleanAuthor(creator, 'contributor')));
+			break;
+		case 'conferencePaper':
+			newItem.date = labels.get('日期');
+			newItem.proceedingsTitle = labels.get('会议录名称');
+			newItem.conferenceName = labels.get('会议名称');
+			labels.get('作者', true).querySelectorAll('a').forEach(element => newItem.creators.push(cleanAuthor(element.textContent, 'author')));
+			labels.get('关键词', true).querySelectorAll('a').forEach(element => newItem.tags.push(element.textContent));
+			break;
+		case 'patent': {
+			newItem.filingDate = ZU.strToISO(labels.get('申请日期'));
+			newItem.applicationNumber = labels.get('申请号');
+			let patentDetail = attr(doc, 'li > a[href*="pat.hnipo"]', 'href');
+			if (newItem.itemType == 'patent' && patentDetail) {
+				let detailDoc = await requestDocument(patentDetail);
+				var tabel = {
+					cells: Array.from(detailDoc.querySelectorAll('td.table_15')),
+					getNext: function (label) {
+						let result = this.cells.find(element => element.innerText == `${label}:`);
+						return result && result.nextElementSibling
+							? result.nextElementSibling.innerText
+							: '';
+					}
+				};
+				newItem.issueDate = tabel.getNext('法律状态公告日');
+				newItem.legalStatus = tabel.getNext('法律状态');
+			}
+			extra.set('Genre', labels.get('专利类型'), true);
+			labels.get('发明人').split('，').forEach(creator => newItem.creators.push(cleanAuthor(creator, 'inventor')));
+			break;
+		}
+		case 'standard':
+			newItem.number = labels.get('标准号').replace('-', '—');
+			extra.set('original-title', labels.get('标准英文名'), true);
+			extra.set('IPC', labels.get('IPC分类号'));
+			extra.set('ICS', labels.get('ICS分类号'));
+			extra.set('reference', labels.get('引用标准'));
+			extra.set('draftingCommittee', labels.get('起草单位'));
+			extra.set('replacement', labels.get('替代情况'));
+			extra.set('CCS', labels.get('中标分类号'));
+			break;
+		default:
+			break;
+	}
+	newItem.url = url;
+	newItem.extra = extra.toString();
+	newItem.complete();
+}
+
+class Labels {
+	constructor(doc, selector) {
+		this.data = [];
+		this.emptyElm = doc.createElement('div');
+		Array.from(doc.querySelectorAll(selector))
+			// avoid nesting
+			.filter(element => !element.querySelector(selector))
+			// avoid empty
+			.filter(element => !/^\s*$/.test(element.textContent))
+			.forEach((element) => {
+				const elmCopy = element.cloneNode(true);
+				// avoid empty text
+				while (/^\s*$/.test(elmCopy.firstChild.textContent)) {
+					// Z.debug(elementCopy.firstChild.textContent);
+					elmCopy.removeChild(elmCopy.firstChild);
+					// Z.debug(elementCopy.firstChild.textContent);
+				}
+				if (elmCopy.childNodes.length > 1) {
+					const key = elmCopy.removeChild(elmCopy.firstChild).textContent.replace(/\s/g, '');
+					this.data.push([key, elmCopy]);
+				}
+				else {
+					const text = ZU.trimInternal(elmCopy.textContent);
+					const key = tryMatch(text, /^[[【]?.+?[】\]:：]/).replace(/\s/g, '');
+					elmCopy.textContent = tryMatch(text, /^[[【]?.+?[】\]:：]\s*(.+)/, 1);
+					this.data.push([key, elmCopy]);
+				}
+			});
+	}
+
+	get(label, element = false) {
+		if (Array.isArray(label)) {
+			const results = label
+				.map(aLabel => this.get(aLabel, element));
+			const keyVal = element
+				? results.find(element => !/^\s*$/.test(element.textContent))
+				: results.find(string => string);
+			return keyVal
+				? keyVal
+				: element
+					? this.emptyElm
+					: '';
+		}
+		const pattern = new RegExp(label, 'i');
+		const keyVal = this.data.find(arr => pattern.test(arr[0]));
+		return keyVal
+			? element
+				? keyVal[1]
+				: ZU.trimInternal(keyVal[1].textContent)
+			: element
+				? this.emptyElm
+				: '';
+	}
+}
+
+class Extra {
+	constructor() {
+		this.fields = [];
+	}
+
+	push(key, val, csl = false) {
+		this.fields.push({ key: key, val: val, csl: csl });
+	}
+
+	set(key, val, csl = false) {
+		let target = this.fields.find(obj => new RegExp(`^${key}$`, 'i').test(obj.key));
+		if (target) {
+			target.val = val;
+		}
+		else {
+			this.push(key, val, csl);
+		}
+	}
+
+	get(key) {
+		let result = this.fields.find(obj => new RegExp(`^${key}$`, 'i').test(obj.key));
+		return result
+			? result.val
+			: undefined;
+	}
+
+	toString(history = '') {
+		this.fields = this.fields.filter(obj => obj.val);
+		return [
+			this.fields.filter(obj => obj.csl).map(obj => `${obj.key}: ${obj.val}`).join('\n'),
+			history,
+			this.fields.filter(obj => !obj.csl).map(obj => `${obj.key}: ${obj.val}`).join('\n')
+		].filter(obj => obj).join('\n');
+	}
+}
+
+function tryMatch(string, pattern, index = 0) {
+	if (!string) return '';
+	let match = string.match(pattern);
+	return (match && match[index])
+		? match[index]
+		: '';
+}
+
+function cleanAuthor(creator, creatorType = 'author') {
+	creator = ZU.cleanAuthor(creator, creatorType);
+	if (/[\u4e00-\u9fff]/.test(creator.lastName)) {
+		creator.lastName = creator.firstName + creator.lastName;
+		creator.firstName = '';
+		creator.fieldMode = 1;
+	}
+	return creator;
 }
 
 /** BEGIN TEST CASES **/
 var testCases = [
 	{
 		"type": "web",
-		"url": "http://book.ucdrs.superlib.net/views/specific/2929/bookDetail.jsp?dxNumber=000018108791&d=F788C1F57DDBFD163B5EDCB5371550F0&fenlei=02140804",
+		"url": "http://jour.ucdrs.superlib.net/views/specific/2929/JourDetail.jsp?dxNumber=100287199277&d=EDA67F761EA0741D8CCBA19AAE292498&s=%E5%9F%BA%E5%9B%A0%E5%85%B1%E8%A1%A8%E8%BE%BE&ecode=utf-8",
 		"items": [
 			{
-				"itemType": "book",
-				"title": "认知跃迁",
+				"itemType": "journalArticle",
+				"title": "卵巢癌基因共表达网络及预后标志物的研究",
 				"creators": [
 					{
-						"lastName": "（日）本田晃一",
+						"firstName": "",
+						"lastName": "顾云婧",
 						"creatorType": "author",
 						"fieldMode": 1
 					},
 					{
-						"lastName": "朱运程",
-						"creatorType": "translator",
+						"firstName": "",
+						"lastName": "朱平",
+						"creatorType": "author",
 						"fieldMode": 1
 					}
 				],
-				"date": "2019.04",
-				"ISBN": "9787221152459",
-				"abstractNote": "在这个发展迅速的世界，每个人都承受着前所未有的压力和挑战。一个人想要取得成功，不是去苛求外部环境，而是要打破固有认知，扩展人生格局，形成更加高效的认知系统。作者将在成功人士身上得到的启发，通过验证形成了自己的认知。通过这些认知，作者将父亲负债累累濒临破产的企业转亏为盈，并积累下了巨额财富。本书将这些认知通过轻松幽默的语言，结合自己的经历阐述出来，为我们看待事物提供与众不同的视角，帮助我们重新认识自我、认清世界。通过本书可以迅速提高认知、扩展格局，快速找到事物本质，打破生活和事业中的困境，让我们成为一个有竞争力的人。",
-				"archiveLocation": "B848.4-49",
-				"libraryCatalog": "Superlib",
-				"numPages": "239",
-				"publisher": "贵州人民出版社",
-				"url": "http://book.ucdrs.superlib.net/views/specific/2929/bookDetail.jsp?dxNumber=000018108791&d=F788C1F57DDBFD163B5EDCB5371550F0&fenlei=02140804",
+				"date": "2020",
+				"abstractNote": "卵巢癌是一种早期诊断率低而致死率较高的恶性肿瘤,对其预后标志物的鉴定和生存率的预测仍是生存分析的重要任务。利用卵巢癌预后相关基因构建基因共表达网络,鉴定预后生物标志物并进行生存率的预测。首先,对TCGA(The cancer genome atlas)数据库下载的卵巢癌基因表达数据实施单因素回归分析,利用得到的747个预后相关基因构建卵巢癌预后加权基因共表达网络。其次,考虑网络的生物学意义,利用蛋白质相互作用(Protein-protein interaction, PPI)数据对共表达网络中的模块重新加权,并根据网络中基因的拓扑重要性对基因进行排序。最后,运用Cox比例风险回归对网络中的重要基因构建卵巢癌预后模型,鉴定了3个预后生物标志物。生存分析结果显示,这3个标志物能够显著区分不同预后的患者,较好地预测卵巢癌患者的预后情况。  隐藏更多",
+				"issue": "5",
+				"libraryCatalog": "SuperLib",
+				"publicationTitle": "生物学杂志",
+				"url": "http://jour.ucdrs.superlib.net/views/specific/2929/JourDetail.jsp?dxNumber=100287199277&d=EDA67F761EA0741D8CCBA19AAE292498&s=%E5%9F%BA%E5%9B%A0%E5%85%B1%E8%A1%A8%E8%BE%BE&ecode=utf-8",
+				"attachments": [],
+				"tags": [
+					{
+						"tag": "加权基因共表达网络分析(WGCNA)"
+					},
+					{
+						"tag": "卵巢癌"
+					},
+					{
+						"tag": "生物标志物"
+					},
+					{
+						"tag": "预后模型"
+					}
+				],
+				"notes": [],
+				"seeAlso": []
+			}
+		]
+	},
+	{
+		"type": "web",
+		"url": "http://book.ucdrs.superlib.net/views/specific/2929/bookDetail.jsp?dxNumber=000015416568&d=7C4B0704D86B606CB102A5B3A3EC74CE&fenlei=151206",
+		"items": [
+			{
+				"itemType": "book",
+				"title": "基因工程",
+				"creators": [
+					{
+						"firstName": "",
+						"lastName": "郑振宇",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "王秀利",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "刘丹梅",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "宋运贤",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "陈国梁",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "邵燕",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "胡沂淮",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "阚劲松",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "韩凤桐",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "孙新城",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "李宏",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "张锐",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "王彦芹",
+						"creatorType": "author",
+						"fieldMode": 1
+					}
+				],
+				"date": "2015-03",
+				"ISBN": "9787560997186",
+				"abstractNote": "内容提要:\n本书以基因工程的研究步骤及实际操作中的需要为主线，共分12章，包括基因工程的基本概念、基因工程基本技术原理、基因工程的工具酶和克隆载体、目的基因的克隆、外源基因的原核表达系统等。",
+				"libraryCatalog": "SuperLib",
+				"numPages": "375",
+				"place": "武汉",
+				"series": "全国普通高等院校生物科学类“十二五”规划教材",
+				"url": "http://book.ucdrs.superlib.net/views/specific/2929/bookDetail.jsp?dxNumber=000015416568&d=7C4B0704D86B606CB102A5B3A3EC74CE&fenlei=151206",
 				"attachments": [],
 				"tags": [],
 				"notes": [],
@@ -478,45 +484,86 @@ var testCases = [
 	},
 	{
 		"type": "web",
-		"url": "http://jour.ucdrs.superlib.net/views/specific/2929/thesisDetail.jsp?dxNumber=390107316149&d=73BC951F9D12D3EF5BFAD6281BFC35F0&sw=%E8%AE%A4%E7%9F%A5",
+		"url": "http://book.ucdrs.superlib.net/views/specific/2929/bookDetail.jsp?dxNumber=000000369267&d=2C67EBC1D046CAEAB6C7168473C0C540&fenlei=080401070331",
 		"items": [
 			{
-				"itemType": "thesis",
-				"title": "认知是否具有现象性？",
+				"itemType": "book",
+				"title": "朗文英语正误词典",
 				"creators": [
 					{
-						"lastName": "孙玉婷",
+						"firstName": "",
+						"lastName": "希顿",
 						"creatorType": "author",
 						"fieldMode": 1
 					},
 					{
-						"lastName": "蔡仲",
-						"creatorType": "contributor",
+						"firstName": "",
+						"lastName": "特顿",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "吴骅",
+						"creatorType": "translator",
 						"fieldMode": 1
 					}
 				],
-				"date": "2019",
-				"abstractNote": "意识有感官、身体感觉、情绪情感、认知等形式,前三种意识形式的每一种意识状态似乎都具有独特的现象特征,但是对于认知状态是否具有现象特征存在激烈争论。一方面,一些理论家认为现象特征是有意识的认知状态固有的现象属性;另一方面,另一些理论家则固守心灵哲学中的传统观点,认为有意识的认知状态不具有现象特征,并且将有意识的认知状态的现象特征还原到感官的现象特征上。本文基于以下几点采取支持认知现象学的立场。首先,我们能够通过内省立即知道我们自身所处的认知状态,而要解释这一事实,就必须承认认知状态的现象感受性,这也就是所谓的自我认识论证;其次,我们能够通过许多案例直观地体验认知的现象感受性,一些理论家基于这些经验实例,构造出巧妙的现象对比论证。这是一种非还原的认知现象学立场,也就是说,现象性是认知状态的固有属性,不可以还原到感官现象性上,现象意识的范围可以拓展到有意识的认知状态。当然,对于以上观点,认知现象学的反对者从不同方面提出质疑。对于自我认识论证,要么质疑内省的可靠性,要么否认我们对自身心理状态的认识特权,要么提出其它方式来解释这种认识特权;对于现象对比论证,还是要将案例中涉及的现象差异还原到心理意象的现象性上。对于反对者的这些做法,我们将指出其中的不足指出,因而他们并不能完成反对认知的现象性的目标,从而捍卫非还原的认知现象学观点。",
-				"libraryCatalog": "Superlib",
-				"thesisType": "硕士",
-				"university": "南京大学",
-				"url": "http://jour.ucdrs.superlib.net/views/specific/2929/thesisDetail.jsp?dxNumber=390107316149&d=73BC951F9D12D3EF5BFAD6281BFC35F0&sw=%E8%AE%A4%E7%9F%A5",
+				"date": "1992-02",
+				"ISBN": "9787533707538",
+				"abstractNote": "内容提要:\n著者原题无汉译名:按字母顺序罗列1700多个常见错误、正误例句、英语与美语的差异、语法术语要领等,大多错误取自剑桥第一证书考试答卷。",
+				"libraryCatalog": "SuperLib",
+				"numPages": "476",
+				"place": "合肥",
+				"url": "http://book.ucdrs.superlib.net/views/specific/2929/bookDetail.jsp?dxNumber=000000369267&d=2C67EBC1D046CAEAB6C7168473C0C540&fenlei=080401070331",
+				"attachments": [],
+				"tags": [],
+				"notes": [],
+				"seeAlso": []
+			}
+		]
+	},
+	{
+		"type": "web",
+		"url": "http://newspaper.ucdrs.superlib.net/views/specific/2929/NPDetail.jsp?dxNumber=406010835180&d=2D1753A572EC38E418149C5B105B093F&sw=+%E7%BA%B3%E7%B1%B3&ecode=utf-8",
+		"items": [
+			{
+				"itemType": "newspaperArticle",
+				"title": "纳米纤维工业滤纸下线",
+				"creators": [
+					{
+						"firstName": "",
+						"lastName": "冯倩",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "秦燕香",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "张晓茹",
+						"creatorType": "author",
+						"fieldMode": 1
+					}
+				],
+				"date": "2022-06-13",
+				"libraryCatalog": "SuperLib",
+				"publicationTitle": "阳泉日报",
+				"url": "http://newspaper.ucdrs.superlib.net/views/specific/2929/NPDetail.jsp?dxNumber=406010835180&d=2D1753A572EC38E418149C5B105B093F&sw=+%E7%BA%B3%E7%B1%B3&ecode=utf-8",
 				"attachments": [],
 				"tags": [
 					{
-						"tag": "内省论证"
+						"tag": "工业滤纸"
 					},
 					{
-						"tag": "现象对比论证"
+						"tag": "纳米纤维"
 					},
 					{
-						"tag": "现象特征"
-					},
-					{
-						"tag": "自我认识论证"
-					},
-					{
-						"tag": "认知"
+						"tag": "过滤效率"
 					}
 				],
 				"notes": [],
@@ -526,68 +573,102 @@ var testCases = [
 	},
 	{
 		"type": "web",
-		"url": "http://jour.ucdrs.superlib.net/views/specific/2929/CPDetail.jsp?dxNumber=330107854501&d=FDBE0D57AC904E5720CCAD02A1BBDA49&sw=%E5%BA%94%E6%BF%80%E4%B8%8E%E8%AE%A4%E7%9F%A5%E7%9A%84ERP%E7%A0%94%E7%A9%B6",
+		"url": "http://jour.ucdrs.superlib.net/views/specific/2929/thesisDetail.jsp?dxNumber=390104353359&d=9358F557560F983157C9B1F338A23F94&sw=%E7%89%B9%E5%BC%82%E6%80%A7%E5%90%B8%E9%99%84%E5%A4%9A%E7%A7%8D%E6%B1%A1%E6%9F%93%E7%89%A9%E7%9A%84%E5%88%86%E5%AD%90%E5%8D%B0%E8%BF%B9%E7%BA%B3%E7%B1%B3%E8%86%9C%E7%9A%84%E5%88%B6%E5%A4%87%E5%92%8C%E6%80%A7%E8%83%BD%E8%AF%84%E4%BB%B7",
+		"items": [
+			{
+				"itemType": "thesis",
+				"title": "特异性吸附多种污染物的分子印迹纳米膜的制备和性能评价",
+				"creators": [
+					{
+						"firstName": "",
+						"lastName": "鲁志强",
+						"creatorType": "author",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "石云",
+						"creatorType": "contributor",
+						"fieldMode": 1
+					},
+					{
+						"firstName": "",
+						"lastName": "吕斌",
+						"creatorType": "contributor",
+						"fieldMode": 1
+					}
+				],
+				"date": "2013",
+				"abstractNote": "目的：食品、水、土壤中均含有低剂量的双酚A（bisphenolA，BPA）和戊唑醇（Tebuconazole，TBZ），这两种环境污染物均为环境雌激素，并可通过食物链富集，因此需要灵敏准确地分析环境中这两种污染物的浓度。分子印迹技术是制备对某一特定靶分子具有选择性识别能力的聚合物的技术，广泛用于特异性分离富集痕量污染物上。但是分子印迹一般是针对单一模板分子的，如何制备可同时特异性分离富集多种污染物的分子印迹材料，一直是近期的研究热点。本研究将BPA分子印迹纳米微球（B-MIP）和TBZ分子印迹纳米微球（T-MIP）封装入聚乙烯醇（PVA）纳米纤维中得到分子印迹纳米纤维膜并以该膜作为吸附材料，以实现同时特异性吸附不同性质污染物之目的。方法：本研究分别以化学结构不同的BPA和TBZ作为模板分子，按不同的组合（BPA、TBZ、BPA+TBZ），合成系列MIPs纳米微球。然后通过静电纺丝技术将不同的MIPs微球包裹进聚乙烯醇（polyvinyl，PVA）纳米纤维膜中，制备出系列分子印迹膜，并对各种膜的吸附性能进行评价。结果：静态吸附实验结果显示，同时含有0.2g BPA-MIPs和0.2g TBZ-MIPs的膜（B&T-MIM），对BPA和TBZ的吸附容量和吸附特异性均明显高于含有0.4g同时以BPA和TBZ为模板印迹的膜（D-MIM）。结果显示纳米纤维膜中的两种MIPs可高效特异性吸附各自的靶污染物，并未互相干扰。结论：B&T-MIM可同时高效特异性吸附痕量酸性污染物BPA和碱性污染物TBZ。  隐藏更多",
+				"libraryCatalog": "SuperLib",
+				"thesisType": "硕士学位论文",
+				"university": "华中科技大学",
+				"url": "http://jour.ucdrs.superlib.net/views/specific/2929/thesisDetail.jsp?dxNumber=390104353359&d=9358F557560F983157C9B1F338A23F94&sw=%E7%89%B9%E5%BC%82%E6%80%A7%E5%90%B8%E9%99%84%E5%A4%9A%E7%A7%8D%E6%B1%A1%E6%9F%93%E7%89%A9%E7%9A%84%E5%88%86%E5%AD%90%E5%8D%B0%E8%BF%B9%E7%BA%B3%E7%B1%B3%E8%86%9C%E7%9A%84%E5%88%B6%E5%A4%87%E5%92%8C%E6%80%A7%E8%83%BD%E8%AF%84%E4%BB%B7",
+				"attachments": [],
+				"tags": [],
+				"notes": [],
+				"seeAlso": []
+			}
+		]
+	},
+	{
+		"type": "web",
+		"url": "http://jour.ucdrs.superlib.net/views/specific/2929/CPDetail.jsp?dxNumber=330108499702&d=B5E6BEF31839C4BD39ED8471E85C4950&sw=%E7%BA%B3%E7%B1%B3",
 		"items": [
 			{
 				"itemType": "conferencePaper",
-				"title": "慢性应激对注意控制影响的ERP证据及tDCS干预",
+				"title": "纳米MMT/SBR复合改性沥青性能研究",
 				"creators": [
 					{
-						"lastName": "刘清衿",
+						"firstName": "",
+						"lastName": "吴池",
 						"creatorType": "author",
 						"fieldMode": 1
 					},
 					{
-						"lastName": "刘永",
+						"firstName": "",
+						"lastName": "弓鑫",
 						"creatorType": "author",
 						"fieldMode": 1
 					},
 					{
-						"lastName": "冷雪晨",
+						"firstName": "",
+						"lastName": "张新宇",
 						"creatorType": "author",
 						"fieldMode": 1
 					},
 					{
-						"lastName": "韩金凤",
+						"firstName": "",
+						"lastName": "张建朝",
 						"creatorType": "author",
 						"fieldMode": 1
 					},
 					{
-						"lastName": "王喜术",
-						"creatorType": "author",
-						"fieldMode": 1
-					},
-					{
-						"lastName": "夏锋",
-						"creatorType": "author",
-						"fieldMode": 1
-					},
-					{
-						"lastName": "陈红",
+						"firstName": "",
+						"lastName": "常晓娟",
 						"creatorType": "author",
 						"fieldMode": 1
 					}
 				],
-				"date": "2019",
-				"abstractNote": "慢性应激是指应激源持续时间超过30天或应激源持续时间较短,但对个体的影响在30天以上的应激。慢性应激不但会引起一系列身心疾病,也会影响大脑的认知功能,尤其是前额叶执行功能。测量、评估慢性应激的危害,并且找到对应的干预方法对人类心理健康十分重要。本研究即以重大考试(研究生入学考试)作为慢性应激源,以多个应激状态评估量表和血压等生理指标作为评定慢性应激的主客观指标,引用注意控制网络ANT范式,采用事件",
-				"conferenceName": "第二十二届全国心理学学术会议",
-				"libraryCatalog": "Superlib",
-				"place": "西南大学心理学部；陆军军医大学西南医院全军肝胆外科研究所",
-				"series": "第二十二届全国心理学学术会议摘要集",
-				"url": "http://jour.ucdrs.superlib.net/views/specific/2929/CPDetail.jsp?dxNumber=330107854501&d=FDBE0D57AC904E5720CCAD02A1BBDA49&sw=%E5%BA%94%E6%BF%80%E4%B8%8E%E8%AE%A4%E7%9F%A5%E7%9A%84ERP%E7%A0%94%E7%A9%B6",
+				"date": "2022",
+				"abstractNote": "为改善SBR改性沥青的抗老化性能,在SBR改性沥青中加入掺量为1%、2%、3%、4%、5%的纳米MMT对其进行改性,制备纳米MMT/SBR复合改性沥青。通过三大指标试验、旋转薄膜烘箱加热、布氏旋转黏度试验、动态剪切流变试验等试验对基质沥青、SBR改性沥青及复合改性沥青的高低温性能、抗老化性能、抗疲劳性能、热储存稳定性能进行对比分析。结果表明:加入纳米MMT后,相较于SBR改性沥青,纳米MMT/SBR复合改性沥青拥有更好的高温性能、抗老化性能、抗疲劳性能及热储存稳定性能,但其低温性能有所下降。实际使用时,考虑到加入4%纳米MMT后,复合改性沥青低温延度下降幅度较大,推荐纳米MMT掺量为3%～4%。  隐藏更多",
+				"conferenceName": "2022世界交通运输大会（WTC2022）",
+				"libraryCatalog": "SuperLib",
+				"proceedingsTitle": "2022世界交通运输大会（WTC2022）",
+				"url": "http://jour.ucdrs.superlib.net/views/specific/2929/CPDetail.jsp?dxNumber=330108499702&d=B5E6BEF31839C4BD39ED8471E85C4950&sw=%E7%BA%B3%E7%B1%B3",
 				"attachments": [],
 				"tags": [
 					{
-						"tag": "ERPs"
+						"tag": "SBR"
 					},
 					{
-						"tag": "tDCS"
+						"tag": "复合改性沥青"
 					},
 					{
-						"tag": "慢性应激"
+						"tag": "性能"
 					},
 					{
-						"tag": "注意控制"
+						"tag": "纳米MMT"
 					}
 				],
 				"notes": [],
@@ -597,47 +678,76 @@ var testCases = [
 	},
 	{
 		"type": "web",
-		"url": "http://jour.ucdrs.superlib.net/views/specific/2929/thesisDetail.jsp?dxNumber=390107059051&d=3F56D2F62968EC84A161D3152EBC23C5&sw=%E5%BA%94%E6%BF%80%E4%B8%8E%E8%AE%A4%E7%9F%A5%E7%9A%84ERP%E7%A0%94%E7%A9%B6",
+		"url": "http://book.ucdrs.superlib.net/views/specific/2929/patentDetail.jsp?dxid=166050451063&d=DDA36D0C0E33BB3674CFCA8E87A1F4FE&sw=+%E7%BA%B3%E7%B1%B3&ecode=utf-8",
 		"items": [
 			{
-				"itemType": "thesis",
-				"title": "在校大学生特质焦虑人群情绪与认知冲突的ERP研究",
+				"itemType": "patent",
+				"title": "黑板（纳米）",
 				"creators": [
 					{
-						"lastName": "徐丹丹",
-						"creatorType": "author",
+						"firstName": "",
+						"lastName": "马燕",
+						"creatorType": "inventor",
 						"fieldMode": 1
 					},
 					{
-						"lastName": "季淑梅",
-						"creatorType": "contributor",
+						"firstName": "",
+						"lastName": "金心茹",
+						"creatorType": "inventor",
 						"fieldMode": 1
 					}
 				],
-				"date": "2018",
-				"abstractNote": "目前大多数研究者主要关注临床焦虑障碍的情绪、认知加工的特点,对于在应激条件下非临床的高特质焦虑得分者研究相对较少。而较高水平的焦虑易感倾向预示着高风险的焦虑障碍以及其它精神疾病。研究在校大学生特质焦虑人群对情绪、认知加工的特点,有助于焦虑症及其他精神疾病的早期诊断和预防。本文利用事件相关电位(Event-Related Potentials,ERP)技术,以高、低特质焦虑个体为研究对象,探讨在校大学生特质焦虑人群情绪冲突和认知冲突的ERP时空模式特点。本研究内容包含以下两部分:第一部分采用“词-面孔”Stroop范式,令16名高、低特质焦虑被试完成由“开心”和“悲伤”面孔及对应情绪词作为材料的情绪冲突任务,探讨在校大学生特质焦虑人群情绪冲突效应及冲突适应效应。对反应正确率的统计分析显示,高、低特质焦虑组均出现情绪冲突效应和冲突适应效应;在反应时上,高、低特质焦虑组均呈现情绪冲突效应,而高特质焦虑组无冲突适应效应,表明高特质焦虑人群冲突监控能力较弱。ERP结果显示,高特质焦虑组在前额区P100和中央顶区N450波幅上表现出冲突适应效应,表明早期注意和冲突监测能力增强;而高特质焦虑组前额区冲突慢电位SP波幅无冲突适应效应,表明对情绪冲突的反应选择及冲突解决能力减弱。第二部分:利用经典Simon范式,令16名高、低特质焦虑被试完成颜色-位置冲突任务,探讨在校大学生特质焦虑人群对空间位置认知冲突的解决和脑加工特征。行为结果表明,高、低特质焦虑组在反应时和正确率上表现出相同干扰模式的Simon效应。ERP结果表明,高特质焦虑组比低特质焦虑组在中央顶区的P300波幅的Simon效应量大,表现出更大的Simon效应;高特质焦虑组对冲突反应的N270和P300波幅小于低特质焦虑组,表明高特质焦虑人群对空间位置冲突加工的认知抑制能力下降。本研究通过情绪冲突和认知冲突揭示了在校大学生特质焦虑人群对冲突反应监控和抑制能力不足。",
-				"libraryCatalog": "Superlib",
-				"thesisType": "硕士",
-				"university": "燕山大学",
-				"url": "http://jour.ucdrs.superlib.net/views/specific/2929/thesisDetail.jsp?dxNumber=390107059051&d=3F56D2F62968EC84A161D3152EBC23C5&sw=%E5%BA%94%E6%BF%80%E4%B8%8E%E8%AE%A4%E7%9F%A5%E7%9A%84ERP%E7%A0%94%E7%A9%B6",
+				"issueDate": "2023.10.03",
+				"abstractNote": "1.本外观设计产品的名称：黑板（纳米）。2.本外观设计产品的用途：用于书写的黑板。3.本外观设计产品的设计要点：在于形状。4.最能表明设计要点的图片或照片：立体图。1.本外观设计产品的名称：黑板（纳米）。2.本外观设计产品的用途：用于书写的黑板。3.本外观设计产品的设计要点：在于形状。4.最能表明设...\n展开",
+				"applicationNumber": "202330176115.6",
+				"filingDate": "2023-04-04",
+				"legalStatus": "授权",
+				"url": "http://book.ucdrs.superlib.net/views/specific/2929/patentDetail.jsp?dxid=166050451063&d=DDA36D0C0E33BB3674CFCA8E87A1F4FE&sw=+%E7%BA%B3%E7%B1%B3&ecode=utf-8",
 				"attachments": [],
-				"tags": [
+				"tags": [],
+				"notes": [],
+				"seeAlso": []
+			}
+		]
+	},
+	{
+		"type": "web",
+		"url": "http://book.ucdrs.superlib.net/views/specific/2929/StdDetail.jsp?dxid=320151546977&d=F3BF82FD19585130C75082812F38D5C9&sw=+%E8%91%97%E5%BD%95",
+		"items": [
+			{
+				"itemType": "standard",
+				"title": "生态环境档案著录细则",
+				"creators": [],
+				"libraryCatalog": "SuperLib",
+				"number": "HJ 9—2022",
+				"url": "http://book.ucdrs.superlib.net/views/specific/2929/StdDetail.jsp?dxid=320151546977&d=F3BF82FD19585130C75082812F38D5C9&sw=+%E8%91%97%E5%BD%95",
+				"attachments": [],
+				"tags": [],
+				"notes": [],
+				"seeAlso": []
+			}
+		]
+	},
+	{
+		"type": "web",
+		"url": "http://eng.ucdrs.superlib.net/views/specific/2929/FBookDetail.jsp?dxNumber=164030712467&d=AF328D3CD1401FE9489CF56D78387CFE#ctop",
+		"items": [
+			{
+				"itemType": "book",
+				"title": "Phonetics: The Science of Speech",
+				"creators": [
 					{
-						"tag": "事件相关电位"
-					},
-					{
-						"tag": "冲突适应效应"
-					},
-					{
-						"tag": "情绪冲突"
-					},
-					{
-						"tag": "特质焦虑"
-					},
-					{
-						"tag": "认知冲突"
+						"firstName": "Martin J. Ball; Joan",
+						"lastName": "Rahilly",
+						"creatorType": "author"
 					}
 				],
+				"abstractNote": "In their comprehensive new introduction to phonetics, Ball and Rahilly offer a detailed explanation of the process of speech production, from the anatomical initiation of sounds and their modification in the larynx, through to the final articulation of vowels and consonants in the oral and nasal tracts.This textbook is one of the few to give a balanced account of segmental and suprasegmental aspects of speech, showing clearly that the communication chain is incomplete without accurate production of both individual speech sounds(segmental features)and aspects such as stress and intonation(suprasegmental features).Throughout the book the authors provide advice on transcription, primarily using the International Phonetic Alphabet(IPA).Students are expertly guided from basic attempts to record speech sounds on paper, to more refined accounts of phonetic detail in speech.The authors go on to explain acoustic phonetics in a manner accessible both to new students in phonetics, and to those who wish to advance their knowledge of key pursuits in the area, including the sound spectrograph.They describe how speech waves can be measured, as well as considering how they are heard and decoded by listeners, discussing both physiological and neurological aspects of hearing and examining the methods of psychoacoustic experimentation.A range of instrumentation for studying speech production is also presented.The next link is acoustic phonetics, the study of speech transmission.Here the authors introduce the basic concepts of sound acoustics and the instrumentation used to analyse the characteristics of speech waves.Finally, the chain is completed by examining auditory phonetics, and providing a fascinating psychoacoustic experimentation, used to determine what parts of the speech signal are most crucial for listener understanding.The book concludes with a comprehensive survey and description of modern phonetic instrumentation, from the sound spectrograph to magnetic resonance imaging(MRI)",
+				"libraryCatalog": "SuperLib",
+				"shortTitle": "Phonetics",
+				"url": "http://eng.ucdrs.superlib.net/views/specific/2929/FBookDetail.jsp?dxNumber=164030712467&d=AF328D3CD1401FE9489CF56D78387CFE#ctop",
+				"attachments": [],
+				"tags": [],
 				"notes": [],
 				"seeAlso": []
 			}
